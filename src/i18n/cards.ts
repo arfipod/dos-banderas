@@ -1,0 +1,76 @@
+import type { Card } from '../types/cards';
+
+const dictionary: Array<[RegExp, string]> = [
+  [/\bStarter\b/g, 'Inicial'],
+  [/\bCapital Sin\b/g, 'Pecado Capital'],
+  [/\bVirtue\b/g, 'Virtud'],
+  [/\bGift of the Holy Spirit\b/g, 'Don del Espíritu Santo'],
+  [/\bSacrament\b/g, 'Sacramento'],
+  [/\bDark Banner\b/g, 'Bandera Oscura'],
+  [/\bMystery\b/g, 'Misterio'],
+  [/\bAlly\b/g, 'Aliado'],
+  [/\bWeapon of Light\b/g, 'Arma de Luz'],
+  [/\bLife Trial\b/g, 'Prueba de Vida'],
+  [/\bDiscernment\b/g, 'Discernimiento'],
+  [/\bPractical Charity\b/g, 'Caridad Práctica'],
+  [/\bCombat\b/g, 'Combate'],
+  [/\bWound\b/g, 'Herida'],
+  [/\bTemptation\b/g, 'Tentación'],
+  [/\bPrayer\b/g, 'Oración'],
+  [/\bWatchfulness\b/g, 'Vigilancia'],
+  [/\bService\b/g, 'Servicio'],
+  [/\bFortitude\b/g, 'Fortaleza'],
+  [/\bSin\b/g, 'Pecado'],
+  [/\bTrial\b/g, 'Prueba'],
+  [/\bLight\b/g, 'Luz'],
+  [/\bFervor\b/g, 'Fervor'],
+  [/\bAttachment\b/g, 'Apego'],
+  [/\bDesolation\b/g, 'Desolación'],
+  [/\bFruit\b/g, 'Fruto'],
+  [/\bFruits\b/g, 'Frutos'],
+  [/\bWorld\b/g, 'Mundo'],
+  [/\bDevil\b/g, 'Demonio'],
+  [/\bFlesh\b/g, 'Carne'],
+  [/\bShortcut\b/g, 'Atajo'],
+  [/\bFinal Choice\b/g, 'Elección Final'],
+  [/\bSimple Prayer\b/g, 'Oración Simple'],
+  [/\bAttention\b/g, 'Atención'],
+  [/\bResistance\b/g, 'Resistencia'],
+  [/\bBrief Examen\b/g, 'Examen Breve'],
+  [/\bFragility\b/g, 'Fragilidad'],
+  [/\bPride\b/g, 'Soberbia'],
+  [/\bGreed\b/g, 'Avaricia'],
+  [/\bLust\b/g, 'Lujuria'],
+  [/\bWrath\b/g, 'Ira'],
+  [/\bGluttony\b/g, 'Gula'],
+  [/\bEnvy\b/g, 'Envidia'],
+  [/\bSloth\b/g, 'Pereza'],
+  [/\bHumility\b/g, 'Humildad'],
+  [/\bGenerosity\b/g, 'Generosidad'],
+  [/\bChastity\b/g, 'Castidad'],
+  [/\bPatience\b/g, 'Paciencia'],
+  [/\bTemperance\b/g, 'Templanza'],
+  [/\bCharity\b/g, 'Caridad'],
+  [/\bDiligence\b/g, 'Diligencia'],
+  [/\bLook at the top card of your deck\. You may discard it\./g, 'Mira la carta superior de tu mazo. Puedes descartarla.'],
+  [/\bIn cooperative play, the companion may contribute one additional card this round\./g, 'En cooperativo, el compañero puede aportar una carta adicional en esta ronda.'],
+  [/\bCancel -1 Light caused by/g, 'Cancela -1 Luz causada por'],
+  [/\bIf you fail this Trial, treat it as a Failure with Examen\./g, 'Si fallas esta Prueba, trátala como un Fallo con Examen.'],
+  [/\bClutters your hand\. It may be removed by purification effects\./g, 'Estorba tu mano. Puede eliminarse con efectos de purificación.'],
+  [/\bIf played before a Gift this round, that Gift gains \+1 Fervor\./g, 'Si se juega antes de un Don en esta ronda, ese Don gana +1 Fervor.'],
+];
+
+function translateText(value: string): string {
+  return dictionary.reduce((text, [pattern, replacement]) => text.replace(pattern, replacement), value);
+}
+
+export function localizeCard(card: Card, lang: 'en' | 'es'): Card {
+  if (lang === 'en') return card;
+  return {
+    ...card,
+    name: translateText(card.name),
+    subtype: translateText(card.subtype),
+    text: translateText(card.text),
+    tags: card.tags.map((tag) => translateText(tag)),
+  };
+}

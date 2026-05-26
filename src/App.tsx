@@ -2,21 +2,21 @@ import { useMemo, useState } from 'react';
 import type { ChangeEvent } from 'react';
 import { cards } from './data/cards';
 import type { Card, RuntimeCard } from './types/cards';
-import type { BannerChoice, Difficulty, GameMode, GameState, PlayerState, Score } from './game/state';
-import { createEmptyGameState } from './game/state';
+import type { BannerChoice, Difficulty, GameMode, GameState, PlayerState, RuleConfig, Score } from './game/state';
+import { createEmptyGameState, DEFAULT_RULES } from './game/state';
 import {
   createRuntimeCard,
   getCardCost,
   getDarkness,
   getOpposedSinHint,
   isExamenCard,
-  MAX_PLAYED_CARDS,
   shuffle,
   STARTER_CARD_NAMES,
 } from './game/rules';
 import { downloadJson, timestampForFilename } from './utils/download';
 import { CardView } from './components/CardView';
 import { RulesReference } from './components/RulesReference';
+import { localizeCard } from './i18n/cards';
 import './styles.css';
 
 type Tab = 'simulator' | 'cards' | 'print' | 'rules';
@@ -78,19 +78,20 @@ function drawTo(player: PlayerState, target: number, log?: (type: string, messag
   return next;
 }
 
-function buildInitialState(mode: GameMode, difficulty: Difficulty): GameState {
+function buildInitialState(mode: GameMode, difficulty: Difficulty, rules: RuleConfig = DEFAULT_RULES): GameState {
   const state = createEmptyGameState();
   state.startedAt = new Date().toISOString();
   state.mode = mode;
   state.difficulty = difficulty;
   state.phase = 'ready';
-  state.communion = difficulty === 'easy' ? 1 : 0;
-  state.desolation = difficulty === 'hard' ? 1 : 0;
+  state.rules = structuredClone(rules);
+  state.communion = difficulty === 'easy' ? state.rules.easyStartingCommunion : 0;
+  state.desolation = difficulty === 'hard' ? state.rules.hardStartingDesolation : 0;
 
   const trialCards = cards.filter((card) => card.type === 'Life Trial');
   const finalTrial = trialCards.find((card) => card.name.startsWith('Final Choice'));
   const normalTrials = trialCards.filter((card) => card.id !== finalTrial?.id);
-  state.situationDeck = shuffle(normalTrials).slice(0, 5).map(createRuntimeCard);
+  state.situationDeck = shuffle(normalTrials).slice(0, state.rules.roundsBeforeFinal).map(createRuntimeCard);
   if (finalTrial) state.situationDeck.push(createRuntimeCard(finalTrial));
 
   state.darkDeck = shuffle(
@@ -108,13 +109,13 @@ function buildInitialState(mode: GameMode, difficulty: Difficulty): GameState {
   state.players = [createPlayer('Player 1')];
   if (mode === 'coop') state.players.push(createPlayer('Player 2'));
 
-  while (state.churchRow.length < 4 && state.lightDeck.length > 0) {
+  while (state.churchRow.length < state.rules.churchRowSize && state.lightDeck.length > 0) {
     const next = state.lightDeck.shift();
     if (next) state.churchRow.push(next);
   }
 
-  state.players[0] = drawTo(state.players[0], 5);
-  if (mode === 'coop') state.players[1] = drawTo(state.players[1], 3);
+  state.players[0] = drawTo(state.players[0], state.rules.starterHandSolo);
+  if (mode === 'coop') state.players[1] = drawTo(state.players[1], state.rules.starterHandCoopSupport);
   return state;
 }
 
@@ -146,7 +147,7 @@ export default function App() {
   }
 
   function startGame() {
-    const nextState = buildInitialState(mode, difficulty);
+    const nextState = buildInitialState(mode, difficulty, state.rules);
     nextState.playtestLog.push({
       timestamp: new Date().toISOString(),
       type: 'start',
@@ -191,10 +192,10 @@ export default function App() {
       draft.bonusFervor = 0;
       draft.darknessModifier = 0;
 
-      draft.players[draft.activePlayer] = drawTo(draft.players[draft.activePlayer], 5, addLog);
+      draft.players[draft.activePlayer] = drawTo(draft.players[draft.activePlayer], draft.rules.starterHandCoopActive, addLog);
       if (draft.mode === 'coop') {
         const otherIndex = (draft.activePlayer + 1) % draft.players.length;
-        draft.players[otherIndex] = drawTo(draft.players[otherIndex], 3, addLog);
+        draft.players[otherIndex] = drawTo(draft.players[otherIndex], draft.rules.starterHandCoopSupport, addLog);
       }
 
       addLog('reveal', `Round ${draft.round}: ${trial.name}.`, {
@@ -225,8 +226,8 @@ export default function App() {
       }
 
       const currentPlayer = draft.players[draft.activePlayer];
-      if (currentPlayer.played.length >= MAX_PLAYED_CARDS) {
-        addLog('warning', `Cannot play more than ${MAX_PLAYED_CARDS} cards.`);
+      if (currentPlayer.played.length >= draft.rules.maxPlayedCards) {
+        addLog('warning', `Cannot play more than ${draft.rules.maxPlayedCards} cards.`);
         return;
       }
 
@@ -279,20 +280,22 @@ export default function App() {
       const hasExamen = currentPlayer.played.some(isExamenCard);
 
       if (currentScore.success && !draft.acceptedShortcut) {
-        draft.communion += 1;
-        draft.fruits += 3;
+        draft.communion += draft.rules.rewards.cleanVictory.communion;
+        draft.fruits += draft.rules.rewards.cleanVictory.fruits;
+        draft.attachment += draft.rules.rewards.cleanVictory.attachment;
         addLog('resolve', 'Clean Victory: +1 Communion, +3 Fruits.', { score: currentScore });
       } else if (currentScore.success && draft.acceptedShortcut) {
-        draft.fruits += 2;
-        draft.attachment += 1;
+        draft.communion += draft.rules.rewards.mixedVictory.communion;
+        draft.fruits += draft.rules.rewards.mixedVictory.fruits;
+        draft.attachment += draft.rules.rewards.mixedVictory.attachment;
         addLog('resolve', 'Mixed Victory: +2 Fruits, +1 Attachment.', { score: currentScore });
       } else if (!currentScore.success && hasExamen) {
-        draft.desolation += 1;
-        draft.consolation += 1;
-        draft.fruits += 1;
+        draft.desolation += draft.rules.rewards.failedWithExamen.desolation;
+        draft.consolation += draft.rules.rewards.failedWithExamen.consolation;
+        draft.fruits += draft.rules.rewards.failedWithExamen.fruits;
         addLog('resolve', 'Failure with Examen: +1 Desolation, +1 Consolation, +1 Fruit.', { score: currentScore });
       } else {
-        draft.desolation += 1;
+        draft.desolation += draft.rules.rewards.failedClosed.desolation;
         addLog('resolve', 'Closed Failure: +1 Desolation.', { score: currentScore });
       }
 
@@ -327,7 +330,7 @@ export default function App() {
       draft.churchRow.splice(index, 1);
       draft.players[draft.activePlayer].discard.push(card);
 
-      while (draft.churchRow.length < 4 && draft.lightDeck.length > 0) {
+      while (draft.churchRow.length < draft.rules.churchRowSize && draft.lightDeck.length > 0) {
         const next = draft.lightDeck.shift();
         if (next) draft.churchRow.push(next);
       }
@@ -348,10 +351,10 @@ export default function App() {
         draft.activePlayer = (draft.activePlayer + 1) % draft.players.length;
       }
 
-      draft.players[draft.activePlayer] = drawTo(draft.players[draft.activePlayer], 5, addLog);
+      draft.players[draft.activePlayer] = drawTo(draft.players[draft.activePlayer], draft.rules.starterHandCoopActive, addLog);
       if (draft.mode === 'coop') {
         const otherIndex = (draft.activePlayer + 1) % draft.players.length;
-        draft.players[otherIndex] = drawTo(draft.players[otherIndex], 3, addLog);
+        draft.players[otherIndex] = drawTo(draft.players[otherIndex], draft.rules.starterHandCoopSupport, addLog);
       }
 
       addLog('phase', 'Shop phase ended. Ready for the next Trial.');
@@ -389,6 +392,29 @@ export default function App() {
     downloadJson(`dos-banderas-state-${timestampForFilename()}.json`, state);
   }
 
+  function exportRules() {
+    downloadJson(`dos-banderas-rules-${timestampForFilename()}.json`, state.rules);
+  }
+
+  function importRules(event: ChangeEvent<HTMLInputElement>) {
+    const file = event.target.files?.[0];
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onload = () => {
+      try {
+        const parsed = JSON.parse(String(reader.result));
+        commit((draft, addLog) => {
+          draft.rules = { ...draft.rules, ...parsed };
+          addLog('rules', 'Rules imported from JSON file.', { rules: draft.rules });
+        });
+      } catch {
+        commit((draft, addLog) => addLog('warning', 'Could not import rules: invalid JSON file.'));
+      }
+      event.target.value = '';
+    };
+    reader.readAsText(file);
+  }
+
   return (
     <div className="app-shell">
       <header className="app-header">
@@ -415,24 +441,29 @@ export default function App() {
             <h2>{lang === 'es' ? 'Configuración' : 'Game Setup'}</h2>
             <div className="controls-row">
               <label>
-                Mode
+                {lang === 'es' ? 'Modo' : 'Mode'}
                 <select value={mode} onChange={(event: ChangeEvent<HTMLSelectElement>) => setMode(event.target.value as GameMode)}>
                   <option value="solo">Solo</option>
-                  <option value="coop">Local cooperative</option>
+                  <option value="coop">{lang === 'es' ? 'Cooperativo local' : 'Local cooperative'}</option>
                 </select>
               </label>
               <label>
-                Difficulty
+                {lang === 'es' ? 'Dificultad' : 'Difficulty'}
                 <select value={difficulty} onChange={(event: ChangeEvent<HTMLSelectElement>) => setDifficulty(event.target.value as Difficulty)}>
-                  <option value="easy">Contemplative</option>
+                  <option value="easy">{lang === 'es' ? 'Contemplativo' : 'Contemplative'}</option>
                   <option value="normal">Normal</option>
-                  <option value="hard">Intense combat</option>
+                  <option value="hard">{lang === 'es' ? 'Combate intenso' : 'Intense combat'}</option>
                 </select>
               </label>
               <button className="primary" onClick={startGame}>{lang === 'es' ? 'Iniciar partida' : 'Start Game'}</button>
               <button onClick={resetToSetup}>{lang === 'es' ? 'Reiniciar' : 'Reset'}</button>
               <button onClick={exportLog}>{lang === 'es' ? 'Descargar registro' : 'Download Playtest Log'}</button>
               <button onClick={exportState}>{lang === 'es' ? 'Descargar estado' : 'Download State'}</button>
+              <button onClick={exportRules}>{lang === 'es' ? 'Descargar reglas' : 'Download Rules'}</button>
+              <label>
+                {lang === 'es' ? 'Importar reglas' : 'Import Rules'}
+                <input type="file" accept="application/json" onChange={importRules} />
+              </label>
             </div>
           </section>
 
@@ -442,11 +473,11 @@ export default function App() {
                 <h2>{lang === 'es' ? 'Medidores' : 'Meters'}</h2>
                 <div className="meters-grid">
                   {([
-                    ['communion', 'Communion', state.communion],
-                    ['attachment', 'Attachment', state.attachment],
-                    ['desolation', 'Desolation', state.desolation],
-                    ['consolation', 'Consolation', state.consolation],
-                    ['fruits', 'Fruits', state.fruits],
+                    ['communion', lang === 'es' ? 'Comunión' : 'Communion', state.communion],
+                    ['attachment', lang === 'es' ? 'Apego' : 'Attachment', state.attachment],
+                    ['desolation', lang === 'es' ? 'Desolación' : 'Desolation', state.desolation],
+                    ['consolation', lang === 'es' ? 'Consolación' : 'Consolation', state.consolation],
+                    ['fruits', lang === 'es' ? 'Frutos' : 'Fruits', state.fruits],
                   ] as const).map(([field, label, value]) => (
                     <div className="meter" key={field}>
                       <span>{label}</span>
@@ -458,57 +489,58 @@ export default function App() {
                     </div>
                   ))}
                 </div>
-                <p className="phase-line">Phase: <strong>{state.phase}</strong> · Round: <strong>{state.round}/6</strong> · Active: <strong>{player.name}</strong></p>
+                <p className="phase-line">{lang === 'es' ? 'Fase' : 'Phase'}: <strong>{state.phase}</strong> · {lang === 'es' ? 'Ronda' : 'Round'}: <strong>{state.round}/6</strong> · {lang === 'es' ? 'Activo' : 'Active'}: <strong>{player.name}</strong></p>
               </section>
 
               <section className="battle-grid">
                 <div className="panel">
                   <h2>{lang === 'es' ? 'Prueba actual' : 'Current Trial'}</h2>
-                  {state.currentTrial ? <CardView card={state.currentTrial} labels={{ cost: lang === 'es' ? 'Coste' : 'Cost', light: lang === 'es' ? 'Luz' : 'Light', fervor: lang === 'es' ? 'Fervor' : 'Fervor' }} /> : <p className="empty">Reveal a Trial to begin the round.</p>}
+                  {state.currentTrial ? <CardView card={localizeCard(state.currentTrial, lang)} lang={lang} labels={{ cost: lang === 'es' ? 'Coste' : 'Cost', light: lang === 'es' ? 'Luz' : 'Light', fervor: lang === 'es' ? 'Fervor' : 'Fervor' }} /> : <p className="empty">{lang === 'es' ? 'Revela una Prueba para comenzar la ronda.' : 'Reveal a Trial to begin the round.'}</p>}
                 </div>
                 <div className="panel">
                   <h2>{lang === 'es' ? 'Bandera oscura' : 'Dark Banner'}</h2>
-                  {state.currentDarkCard ? <CardView card={state.currentDarkCard} labels={{ cost: lang === 'es' ? 'Coste' : 'Cost', light: lang === 'es' ? 'Luz' : 'Light', fervor: lang === 'es' ? 'Fervor' : 'Fervor' }} /> : <p className="empty">No Dark Banner card revealed.</p>}
+                  {state.currentDarkCard ? <CardView card={localizeCard(state.currentDarkCard, lang)} lang={lang} labels={{ cost: lang === 'es' ? 'Coste' : 'Cost', light: lang === 'es' ? 'Luz' : 'Light', fervor: lang === 'es' ? 'Fervor' : 'Fervor' }} /> : <p className="empty">{lang === 'es' ? 'No se reveló carta de Bandera Oscura.' : 'No Dark Banner card revealed.'}</p>}
                 </div>
               </section>
 
               <section className="panel score-panel">
                 <h2>{lang === 'es' ? 'Resolución' : 'Resolution'}</h2>
                 <div className="score-grid">
-                  <div><strong>{score.light}</strong><span>Light</span></div>
+                  <div><strong>{score.light}</strong><span>{lang === 'es' ? 'Luz' : 'Light'}</span></div>
                   <div><strong>×{score.fervor}</strong><span>Fervor</span></div>
-                  <div><strong>{score.result}</strong><span>Result</span></div>
-                  <div><strong>{score.darkness}</strong><span>Darkness</span></div>
+                  <div><strong>{score.result}</strong><span>{lang === 'es' ? 'Resultado' : 'Result'}</span></div>
+                  <div><strong>{score.darkness}</strong><span>{lang === 'es' ? 'Oscuridad' : 'Darkness'}</span></div>
                 </div>
                 <div className="controls-row">
                   <button className="primary" onClick={revealRound} disabled={state.phase !== 'ready'}>{lang === 'es' ? 'Revelar prueba' : 'Reveal Trial'}</button>
-                  <button className="good" onClick={() => chooseBanner('christ')} disabled={!state.currentTrial}>Christ's Banner</button>
-                  <button className="danger" onClick={() => chooseBanner('shortcut')} disabled={!state.currentTrial}>Accept Shortcut</button>
+                  <button className="good" onClick={() => chooseBanner('christ')} disabled={!state.currentTrial}>{lang === 'es' ? 'Bandera de Cristo' : "Christ's Banner"}</button>
+                  <button className="danger" onClick={() => chooseBanner('shortcut')} disabled={!state.currentTrial}>{lang === 'es' ? 'Aceptar atajo' : 'Accept Shortcut'}</button>
                   <button className="primary" onClick={resolveRound} disabled={state.phase !== 'play'}>{lang === 'es' ? 'Resolver' : 'Resolve'}</button>
                   <button onClick={endShop} disabled={state.phase !== 'shop'}>{lang === 'es' ? 'Terminar compra' : 'End Shop'}</button>
-                  <button onClick={drawManual}>Draw 1</button>
+                  <button onClick={drawManual}>{lang === 'es' ? 'Robar 1' : 'Draw 1'}</button>
                   <button onClick={nextAction}>{lang === 'es' ? 'Siguiente' : 'Next'}</button>
                 </div>
                 <div className="controls-row">
-                  <button onClick={() => adjust('bonusLight', +1)}>+1 Light</button>
-                  <button onClick={() => adjust('bonusLight', -1)}>-1 Light</button>
+                  <button onClick={() => adjust('bonusLight', +1)}>+1 {lang === 'es' ? 'Luz' : 'Light'}</button>
+                  <button onClick={() => adjust('bonusLight', -1)}>-1 {lang === 'es' ? 'Luz' : 'Light'}</button>
                   <button onClick={() => adjust('bonusFervor', +1)}>+1 Fervor</button>
                   <button onClick={() => adjust('bonusFervor', -1)}>-1 Fervor</button>
-                  <button onClick={() => adjust('darknessModifier', +1)}>+1 Darkness</button>
-                  <button onClick={() => adjust('darknessModifier', -1)}>-1 Darkness</button>
+                  <button onClick={() => adjust('darknessModifier', +1)}>+1 {lang === 'es' ? 'Oscuridad' : 'Darkness'}</button>
+                  <button onClick={() => adjust('darknessModifier', -1)}>-1 {lang === 'es' ? 'Oscuridad' : 'Darkness'}</button>
                   <button onClick={undoLastPlayed}>{lang === 'es' ? 'Deshacer jugada' : 'Undo Played'}</button>
                 </div>
               </section>
 
               <section className="panel">
-                <h2>Hand · {player.name}</h2>
-                <p className="hint">Deck {player.deck.length} · Discard {player.discard.length} · Played {player.played.length}/{MAX_PLAYED_CARDS}</p>
+                <h2>{lang === 'es' ? 'Mano' : 'Hand'} · {player.name}</h2>
+                <p className="hint">{lang === 'es' ? 'Mazo' : 'Deck'} {player.deck.length} · {lang === 'es' ? 'Descartes' : 'Discard'} {player.discard.length} · {lang === 'es' ? 'Jugadas' : 'Played'} {player.played.length}/{state.rules.maxPlayedCards}</p>
                 <div className="card-grid">
-                  {player.hand.length === 0 && <p className="empty">No cards in hand.</p>}
+                  {player.hand.length === 0 && <p className="empty">{lang === 'es' ? 'No hay cartas en mano.' : 'No cards in hand.'}</p>}
                   {player.hand.map((card) => (
                     <CardView
                       key={card.uid}
-                      card={card}
+                      card={localizeCard(card, lang)}
+                      lang={lang}
                       compact
                       actionLabel={lang === 'es' ? 'Jugar' : 'Play'}
                       disabled={state.phase !== 'play'}
@@ -521,19 +553,20 @@ export default function App() {
               <section className="panel">
                 <h2>{lang === 'es' ? 'Cartas jugadas' : 'Played Cards'}</h2>
                 <div className="card-grid">
-                  {player.played.length === 0 && <p className="empty">No cards played yet.</p>}
-                  {player.played.map((card) => <CardView key={card.uid} card={card} compact labels={{ cost: lang === 'es' ? 'Coste' : 'Cost', light: lang === 'es' ? 'Luz' : 'Light', fervor: lang === 'es' ? 'Fervor' : 'Fervor' }} />)}
+                  {player.played.length === 0 && <p className="empty">{lang === 'es' ? 'Aún no hay cartas jugadas.' : 'No cards played yet.'}</p>}
+                  {player.played.map((card) => <CardView key={card.uid} card={localizeCard(card, lang)} lang={lang} compact labels={{ cost: lang === 'es' ? 'Coste' : 'Cost', light: lang === 'es' ? 'Luz' : 'Light', fervor: lang === 'es' ? 'Fervor' : 'Fervor' }} />)}
                 </div>
               </section>
 
               <section className="panel">
                 <h2>{lang === 'es' ? 'Fila de Iglesia' : 'Church Row'}</h2>
-                <p className="hint">Buy during the shop phase. Current Fruits: {state.fruits}</p>
+                <p className="hint">{lang === 'es' ? 'Compra durante la fase de tienda. Frutos actuales' : 'Buy during the shop phase. Current Fruits'}: {state.fruits}</p>
                 <div className="card-grid">
                   {state.churchRow.map((card) => (
                     <CardView
                       key={card.uid}
-                      card={card}
+                      card={localizeCard(card, lang)}
+                      lang={lang}
                       compact
                       actionLabel={lang === 'es' ? 'Comprar' : 'Buy'}
                       buyLabel={lang === 'es' ? 'Comprar' : 'Buy'}
@@ -563,9 +596,9 @@ export default function App() {
       {tab === 'cards' && (
         <main className="panel">
           <h2>{lang === 'es' ? 'Biblioteca de cartas' : 'Card Library'}</h2>
-          <p className="hint">All 90 prototype cards are stored as typed data in <code>src/data/cards.ts</code>.</p>
+          <p className="hint">{lang === 'es' ? 'Las 90 cartas prototipo están en datos tipados en' : 'All 90 prototype cards are stored as typed data in'} <code>src/data/cards.ts</code>.</p>
           <div className="card-grid library">
-            {cards.map((card) => <CardView key={card.id} card={card} compact labels={{ cost: lang === 'es' ? 'Coste' : 'Cost', light: lang === 'es' ? 'Luz' : 'Light', fervor: lang === 'es' ? 'Fervor' : 'Fervor' }} />)}
+            {cards.map((card) => <CardView key={card.id} card={localizeCard(card, lang)} lang={lang} compact labels={{ cost: lang === 'es' ? 'Coste' : 'Cost', light: lang === 'es' ? 'Luz' : 'Light', fervor: lang === 'es' ? 'Fervor' : 'Fervor' }} />)}
           </div>
         </main>
       )}
@@ -573,9 +606,9 @@ export default function App() {
       {tab === 'print' && (
         <main className="print-page">
           <h2 className="screen-only">{lang === 'es' ? 'Cartas para imprimir y jugar' : 'Print & Play Cards'}</h2>
-          <p className="screen-only">Use the browser print command. The print CSS lays the cards out as 63×88mm cards on A4 sheets.</p>
+          <p className="screen-only">{lang === 'es' ? 'Usa el comando de impresión del navegador. El CSS de impresión organiza cartas de 63×88mm en hojas A4.' : 'Use the browser print command. The print CSS lays the cards out as 63×88mm cards on A4 sheets.'}</p>
           <div className="print-grid">
-            {cards.map((card) => <CardView key={card.id} card={card} compact labels={{ cost: lang === 'es' ? 'Coste' : 'Cost', light: lang === 'es' ? 'Luz' : 'Light', fervor: lang === 'es' ? 'Fervor' : 'Fervor' }} />)}
+            {cards.map((card) => <CardView key={card.id} card={localizeCard(card, lang)} lang={lang} compact labels={{ cost: lang === 'es' ? 'Coste' : 'Cost', light: lang === 'es' ? 'Luz' : 'Light', fervor: lang === 'es' ? 'Fervor' : 'Fervor' }} />)}
           </div>
         </main>
       )}
@@ -594,7 +627,8 @@ function calculateScore(state: GameState): Score {
   const baseLight = player?.played.reduce((sum, card) => sum + (card.light ?? 0), 0) ?? 0;
   const baseFervor = 1 + (player?.played.reduce((sum, card) => sum + (card.fervor ?? 0), 0) ?? 0);
   const finalExtra = state.currentTrial?.name.startsWith('Final Choice')
-    ? Math.max(0, state.attachment - 5) * 2
+    ? Math.max(0, state.attachment - state.rules.finalChoiceAttachmentThreshold) *
+      state.rules.finalChoiceDarknessPerAttachmentOverThreshold
     : 0;
 
   const light = Math.max(0, baseLight + state.bonusLight);

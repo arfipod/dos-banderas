@@ -46,6 +46,25 @@ export interface PlaytestEvent {
   };
 }
 
+export interface RuleConfig {
+  maxPlayedCards: number;
+  starterHandSolo: number;
+  starterHandCoopActive: number;
+  starterHandCoopSupport: number;
+  churchRowSize: number;
+  roundsBeforeFinal: number;
+  easyStartingCommunion: number;
+  hardStartingDesolation: number;
+  rewards: {
+    cleanVictory: { communion: number; fruits: number; attachment: number };
+    mixedVictory: { communion: number; fruits: number; attachment: number };
+    failedWithExamen: { desolation: number; consolation: number; fruits: number };
+    failedClosed: { desolation: number };
+  };
+  finalChoiceAttachmentThreshold: number;
+  finalChoiceDarknessPerAttachmentOverThreshold: number;
+}
+
 export interface GameState {
   version: string;
   startedAt: string | null;
@@ -73,7 +92,27 @@ export interface GameState {
   currentDarkCard: RuntimeCard | null;
   players: PlayerState[];
   playtestLog: PlaytestEvent[];
+  rules: RuleConfig;
 }
+
+export const DEFAULT_RULES: RuleConfig = {
+  maxPlayedCards: 4,
+  starterHandSolo: 5,
+  starterHandCoopActive: 5,
+  starterHandCoopSupport: 3,
+  churchRowSize: 4,
+  roundsBeforeFinal: 5,
+  easyStartingCommunion: 1,
+  hardStartingDesolation: 1,
+  rewards: {
+    cleanVictory: { communion: 1, fruits: 3, attachment: 0 },
+    mixedVictory: { communion: 0, fruits: 2, attachment: 1 },
+    failedWithExamen: { desolation: 1, consolation: 1, fruits: 1 },
+    failedClosed: { desolation: 1 },
+  },
+  finalChoiceAttachmentThreshold: 5,
+  finalChoiceDarknessPerAttachmentOverThreshold: 2,
+};
 
 export function createEmptyGameState(): GameState {
   return {
@@ -103,5 +142,6 @@ export function createEmptyGameState(): GameState {
     currentDarkCard: null,
     players: [],
     playtestLog: [],
+    rules: structuredClone(DEFAULT_RULES),
   };
 }
