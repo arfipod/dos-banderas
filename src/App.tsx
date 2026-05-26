@@ -1,4 +1,5 @@
 import { useMemo, useState } from 'react';
+import type { ChangeEvent } from 'react';
 import { cards } from './data/cards';
 import type { Card, RuntimeCard } from './types/cards';
 import type { BannerChoice, Difficulty, GameMode, GameState, PlayerState, Score } from './game/state';
@@ -408,14 +409,14 @@ export default function App() {
             <div className="controls-row">
               <label>
                 Mode
-                <select value={mode} onChange={(event) => setMode(event.target.value as GameMode)}>
+                <select value={mode} onChange={(event: ChangeEvent<HTMLSelectElement>) => setMode(event.target.value as GameMode)}>
                   <option value="solo">Solo</option>
                   <option value="coop">Local cooperative</option>
                 </select>
               </label>
               <label>
                 Difficulty
-                <select value={difficulty} onChange={(event) => setDifficulty(event.target.value as Difficulty)}>
+                <select value={difficulty} onChange={(event: ChangeEvent<HTMLSelectElement>) => setDifficulty(event.target.value as Difficulty)}>
                   <option value="easy">Contemplative</option>
                   <option value="normal">Normal</option>
                   <option value="hard">Intense combat</option>
