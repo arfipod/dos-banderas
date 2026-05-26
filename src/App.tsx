@@ -157,6 +157,11 @@ export default function App() {
     });
     setState(nextState);
     setTab('simulator');
+
+    // On mobile the setup panel remains at the top, so the user may think
+    // "Start Game" did nothing. Scroll to the live game area after state updates.
+    window.requestAnimationFrame(() =>
+      document.querySelector('.meters-panel')?.scrollIntoView({ behavior: 'smooth', block: 'start' }));
   }
 
   function revealRound() {
@@ -192,7 +197,8 @@ export default function App() {
       draft.bonusFervor = 0;
       draft.darknessModifier = 0;
 
-      draft.players[draft.activePlayer] = drawTo(draft.players[draft.activePlayer], draft.rules.starterHandCoopActive, addLog);
+      const activeHandTarget = draft.mode === 'coop' ? draft.rules.starterHandCoopActive : draft.rules.starterHandSolo;
+      draft.players[draft.activePlayer] = drawTo(draft.players[draft.activePlayer], activeHandTarget, addLog);
       if (draft.mode === 'coop') {
         const otherIndex = (draft.activePlayer + 1) % draft.players.length;
         draft.players[otherIndex] = drawTo(draft.players[otherIndex], draft.rules.starterHandCoopSupport, addLog);
@@ -351,7 +357,8 @@ export default function App() {
         draft.activePlayer = (draft.activePlayer + 1) % draft.players.length;
       }
 
-      draft.players[draft.activePlayer] = drawTo(draft.players[draft.activePlayer], draft.rules.starterHandCoopActive, addLog);
+      const activeHandTarget = draft.mode === 'coop' ? draft.rules.starterHandCoopActive : draft.rules.starterHandSolo;
+      draft.players[draft.activePlayer] = drawTo(draft.players[draft.activePlayer], activeHandTarget, addLog);
       if (draft.mode === 'coop') {
         const otherIndex = (draft.activePlayer + 1) % draft.players.length;
         draft.players[otherIndex] = drawTo(draft.players[otherIndex], draft.rules.starterHandCoopSupport, addLog);
@@ -374,6 +381,7 @@ export default function App() {
 
   function nextAction() {
     if (state.phase === 'ready') revealRound();
+    else if (state.phase === 'choose-banner') commit((draft, addLog) => addLog('warning', "Choose Christ's Banner or Accept Shortcut before continuing."));
     else if (state.phase === 'play') resolveRound();
     else if (state.phase === 'shop') endShop();
   }

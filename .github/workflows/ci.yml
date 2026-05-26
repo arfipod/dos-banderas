@@ -1,0 +1,37 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+
+jobs:
+  build-and-simulate:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Typecheck and build
+        run: npm run build
+
+      - name: Run headless simulations
+        run: npm run sim:headless -- --games 200 --mode solo --difficulty normal
+
+      - name: Upload production build
+        uses: actions/upload-artifact@v4
+        with:
+          name: dos-banderas-dist
+          path: dist
+          if-no-files-found: error
