@@ -20,6 +20,7 @@ import { RulesReference } from './components/RulesReference';
 import './styles.css';
 
 type Tab = 'simulator' | 'cards' | 'print' | 'rules';
+type Language = 'en' | 'es';
 
 function createPlayer(name: string): PlayerState {
   const starterCards = STARTER_CARD_NAMES
@@ -120,6 +121,7 @@ function buildInitialState(mode: GameMode, difficulty: Difficulty): GameState {
 export default function App() {
   const [tab, setTab] = useState<Tab>('simulator');
   const [mode, setMode] = useState<GameMode>('solo');
+  const [lang, setLang] = useState<Language>('es');
   const [difficulty, setDifficulty] = useState<Difficulty>('normal');
   const [state, setState] = useState<GameState>(() => createEmptyGameState());
 
@@ -392,20 +394,25 @@ export default function App() {
       <header className="app-header">
         <div>
           <h1>Dos Banderas</h1>
-          <p>Spiritual combat card game prototype · React + TypeScript + Vite</p>
+          <p>{lang === 'es' ? 'Prototipo de juego de cartas de combate espiritual · React + TypeScript + Vite' : 'Spiritual combat card game prototype · React + TypeScript + Vite'}</p>
         </div>
         <nav>
-          <button className={tab === 'simulator' ? 'active' : ''} onClick={() => setTab('simulator')}>Simulator</button>
-          <button className={tab === 'cards' ? 'active' : ''} onClick={() => setTab('cards')}>Cards</button>
-          <button className={tab === 'print' ? 'active' : ''} onClick={() => setTab('print')}>Print</button>
-          <button className={tab === 'rules' ? 'active' : ''} onClick={() => setTab('rules')}>Rules</button>
+          <button className={tab === 'simulator' ? 'active' : ''} onClick={() => setTab('simulator')}>{lang === 'es' ? 'Simulador' : 'Simulator'}</button>
+          <button className={tab === 'cards' ? 'active' : ''} onClick={() => setTab('cards')}>{lang === 'es' ? 'Cartas' : 'Cards'}</button>
+          <button className={tab === 'print' ? 'active' : ''} onClick={() => setTab('print')}>{lang === 'es' ? 'Imprimir' : 'Print'}</button>
+          <button className={tab === 'rules' ? 'active' : ''} onClick={() => setTab('rules')}>{lang === 'es' ? 'Reglas' : 'Rules'}</button>
+        
+          <select value={lang} onChange={(event: ChangeEvent<HTMLSelectElement>) => setLang(event.target.value as Language)}>
+            <option value="es">Español</option>
+            <option value="en">English</option>
+          </select>
         </nav>
       </header>
 
       {tab === 'simulator' && (
         <main className="simulator-layout">
           <section className="panel setup-panel">
-            <h2>Game Setup</h2>
+            <h2>{lang === 'es' ? 'Configuración' : 'Game Setup'}</h2>
             <div className="controls-row">
               <label>
                 Mode
@@ -422,17 +429,17 @@ export default function App() {
                   <option value="hard">Intense combat</option>
                 </select>
               </label>
-              <button className="primary" onClick={startGame}>Start Game</button>
-              <button onClick={resetToSetup}>Reset</button>
-              <button onClick={exportLog}>Download Playtest Log</button>
-              <button onClick={exportState}>Download State</button>
+              <button className="primary" onClick={startGame}>{lang === 'es' ? 'Iniciar partida' : 'Start Game'}</button>
+              <button onClick={resetToSetup}>{lang === 'es' ? 'Reiniciar' : 'Reset'}</button>
+              <button onClick={exportLog}>{lang === 'es' ? 'Descargar registro' : 'Download Playtest Log'}</button>
+              <button onClick={exportState}>{lang === 'es' ? 'Descargar estado' : 'Download State'}</button>
             </div>
           </section>
 
           {state.phase !== 'setup' && player && (
             <>
               <section className="panel meters-panel">
-                <h2>Meters</h2>
+                <h2>{lang === 'es' ? 'Medidores' : 'Meters'}</h2>
                 <div className="meters-grid">
                   {([
                     ['communion', 'Communion', state.communion],
@@ -456,17 +463,17 @@ export default function App() {
 
               <section className="battle-grid">
                 <div className="panel">
-                  <h2>Current Trial</h2>
-                  {state.currentTrial ? <CardView card={state.currentTrial} /> : <p className="empty">Reveal a Trial to begin the round.</p>}
+                  <h2>{lang === 'es' ? 'Prueba actual' : 'Current Trial'}</h2>
+                  {state.currentTrial ? <CardView card={state.currentTrial} labels={{ cost: lang === 'es' ? 'Coste' : 'Cost', light: lang === 'es' ? 'Luz' : 'Light', fervor: lang === 'es' ? 'Fervor' : 'Fervor' }} /> : <p className="empty">Reveal a Trial to begin the round.</p>}
                 </div>
                 <div className="panel">
-                  <h2>Dark Banner</h2>
-                  {state.currentDarkCard ? <CardView card={state.currentDarkCard} /> : <p className="empty">No Dark Banner card revealed.</p>}
+                  <h2>{lang === 'es' ? 'Bandera oscura' : 'Dark Banner'}</h2>
+                  {state.currentDarkCard ? <CardView card={state.currentDarkCard} labels={{ cost: lang === 'es' ? 'Coste' : 'Cost', light: lang === 'es' ? 'Luz' : 'Light', fervor: lang === 'es' ? 'Fervor' : 'Fervor' }} /> : <p className="empty">No Dark Banner card revealed.</p>}
                 </div>
               </section>
 
               <section className="panel score-panel">
-                <h2>Resolution</h2>
+                <h2>{lang === 'es' ? 'Resolución' : 'Resolution'}</h2>
                 <div className="score-grid">
                   <div><strong>{score.light}</strong><span>Light</span></div>
                   <div><strong>×{score.fervor}</strong><span>Fervor</span></div>
@@ -474,13 +481,13 @@ export default function App() {
                   <div><strong>{score.darkness}</strong><span>Darkness</span></div>
                 </div>
                 <div className="controls-row">
-                  <button className="primary" onClick={revealRound} disabled={state.phase !== 'ready'}>Reveal Trial</button>
+                  <button className="primary" onClick={revealRound} disabled={state.phase !== 'ready'}>{lang === 'es' ? 'Revelar prueba' : 'Reveal Trial'}</button>
                   <button className="good" onClick={() => chooseBanner('christ')} disabled={!state.currentTrial}>Christ's Banner</button>
                   <button className="danger" onClick={() => chooseBanner('shortcut')} disabled={!state.currentTrial}>Accept Shortcut</button>
-                  <button className="primary" onClick={resolveRound} disabled={state.phase !== 'play'}>Resolve</button>
-                  <button onClick={endShop} disabled={state.phase !== 'shop'}>End Shop</button>
+                  <button className="primary" onClick={resolveRound} disabled={state.phase !== 'play'}>{lang === 'es' ? 'Resolver' : 'Resolve'}</button>
+                  <button onClick={endShop} disabled={state.phase !== 'shop'}>{lang === 'es' ? 'Terminar compra' : 'End Shop'}</button>
                   <button onClick={drawManual}>Draw 1</button>
-                  <button onClick={nextAction}>Next</button>
+                  <button onClick={nextAction}>{lang === 'es' ? 'Siguiente' : 'Next'}</button>
                 </div>
                 <div className="controls-row">
                   <button onClick={() => adjust('bonusLight', +1)}>+1 Light</button>
@@ -489,7 +496,7 @@ export default function App() {
                   <button onClick={() => adjust('bonusFervor', -1)}>-1 Fervor</button>
                   <button onClick={() => adjust('darknessModifier', +1)}>+1 Darkness</button>
                   <button onClick={() => adjust('darknessModifier', -1)}>-1 Darkness</button>
-                  <button onClick={undoLastPlayed}>Undo Played</button>
+                  <button onClick={undoLastPlayed}>{lang === 'es' ? 'Deshacer jugada' : 'Undo Played'}</button>
                 </div>
               </section>
 
@@ -503,7 +510,7 @@ export default function App() {
                       key={card.uid}
                       card={card}
                       compact
-                      actionLabel="Play"
+                      actionLabel={lang === 'es' ? 'Jugar' : 'Play'}
                       disabled={state.phase !== 'play'}
                       onAction={() => playCard(card.uid)}
                     />
@@ -512,15 +519,15 @@ export default function App() {
               </section>
 
               <section className="panel">
-                <h2>Played Cards</h2>
+                <h2>{lang === 'es' ? 'Cartas jugadas' : 'Played Cards'}</h2>
                 <div className="card-grid">
                   {player.played.length === 0 && <p className="empty">No cards played yet.</p>}
-                  {player.played.map((card) => <CardView key={card.uid} card={card} compact />)}
+                  {player.played.map((card) => <CardView key={card.uid} card={card} compact labels={{ cost: lang === 'es' ? 'Coste' : 'Cost', light: lang === 'es' ? 'Luz' : 'Light', fervor: lang === 'es' ? 'Fervor' : 'Fervor' }} />)}
                 </div>
               </section>
 
               <section className="panel">
-                <h2>Church Row</h2>
+                <h2>{lang === 'es' ? 'Fila de Iglesia' : 'Church Row'}</h2>
                 <p className="hint">Buy during the shop phase. Current Fruits: {state.fruits}</p>
                 <div className="card-grid">
                   {state.churchRow.map((card) => (
@@ -528,7 +535,9 @@ export default function App() {
                       key={card.uid}
                       card={card}
                       compact
-                      actionLabel="Buy"
+                      actionLabel={lang === 'es' ? 'Comprar' : 'Buy'}
+                      buyLabel={lang === 'es' ? 'Comprar' : 'Buy'}
+                      labels={{ cost: lang === 'es' ? 'Coste' : 'Cost', light: lang === 'es' ? 'Luz' : 'Light', fervor: lang === 'es' ? 'Fervor' : 'Fervor' }}
                       disabled={state.phase !== 'shop' || state.fruits < getCardCost(card)}
                       onAction={() => buyCard(card.uid)}
                     />
@@ -537,7 +546,7 @@ export default function App() {
               </section>
 
               <section className="panel">
-                <h2>Playtest Log</h2>
+                <h2>{lang === 'es' ? 'Registro de pruebas' : 'Playtest Log'}</h2>
                 <div className="log-list">
                   {[...state.playtestLog].reverse().map((event, index) => (
                     <p key={`${event.timestamp}-${index}`}>
@@ -553,27 +562,27 @@ export default function App() {
 
       {tab === 'cards' && (
         <main className="panel">
-          <h2>Card Library</h2>
+          <h2>{lang === 'es' ? 'Biblioteca de cartas' : 'Card Library'}</h2>
           <p className="hint">All 90 prototype cards are stored as typed data in <code>src/data/cards.ts</code>.</p>
           <div className="card-grid library">
-            {cards.map((card) => <CardView key={card.id} card={card} compact />)}
+            {cards.map((card) => <CardView key={card.id} card={card} compact labels={{ cost: lang === 'es' ? 'Coste' : 'Cost', light: lang === 'es' ? 'Luz' : 'Light', fervor: lang === 'es' ? 'Fervor' : 'Fervor' }} />)}
           </div>
         </main>
       )}
 
       {tab === 'print' && (
         <main className="print-page">
-          <h2 className="screen-only">Print & Play Cards</h2>
+          <h2 className="screen-only">{lang === 'es' ? 'Cartas para imprimir y jugar' : 'Print & Play Cards'}</h2>
           <p className="screen-only">Use the browser print command. The print CSS lays the cards out as 63×88mm cards on A4 sheets.</p>
           <div className="print-grid">
-            {cards.map((card) => <CardView key={card.id} card={card} compact />)}
+            {cards.map((card) => <CardView key={card.id} card={card} compact labels={{ cost: lang === 'es' ? 'Coste' : 'Cost', light: lang === 'es' ? 'Luz' : 'Light', fervor: lang === 'es' ? 'Fervor' : 'Fervor' }} />)}
           </div>
         </main>
       )}
 
       {tab === 'rules' && (
         <main>
-          <RulesReference />
+          <RulesReference lang={lang} />
         </main>
       )}
     </div>
