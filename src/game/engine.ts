@@ -175,7 +175,8 @@ function revealRound(draft: GameState) {
   draft.bonusLight = 0;
   draft.bonusFervor = 0;
   draft.darknessModifier = 0;
-  draft.players[draft.activePlayer] = drawTo(draft.players[draft.activePlayer], draft.rules.starterHandCoopActive);
+  const activeHandTarget = draft.mode === 'coop' ? draft.rules.starterHandCoopActive : draft.rules.starterHandSolo;
+  draft.players[draft.activePlayer] = drawTo(draft.players[draft.activePlayer], activeHandTarget);
   if (draft.mode === 'coop') {
     const otherIndex = (draft.activePlayer + 1) % draft.players.length;
     draft.players[otherIndex] = drawTo(draft.players[otherIndex], draft.rules.starterHandCoopSupport);
@@ -232,7 +233,8 @@ function buyCard(draft: GameState, uid: string): boolean {
 function endShop(draft: GameState) {
   draft.phase = 'ready';
   if (draft.mode === 'coop') draft.activePlayer = (draft.activePlayer + 1) % draft.players.length;
-  draft.players[draft.activePlayer] = drawTo(draft.players[draft.activePlayer], draft.rules.starterHandCoopActive);
+  const activeHandTarget = draft.mode === 'coop' ? draft.rules.starterHandCoopActive : draft.rules.starterHandSolo;
+  draft.players[draft.activePlayer] = drawTo(draft.players[draft.activePlayer], activeHandTarget);
   if (draft.mode === 'coop') {
     const otherIndex = (draft.activePlayer + 1) % draft.players.length;
     draft.players[otherIndex] = drawTo(draft.players[otherIndex], draft.rules.starterHandCoopSupport);
