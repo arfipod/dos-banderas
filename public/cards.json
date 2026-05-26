@@ -1,0 +1,1179 @@
+[
+  {
+    "id": "starter-simple-prayer-1",
+    "name": "Simple Prayer",
+    "type": "Starter",
+    "subtype": "Weapon of Light",
+    "cost": 0,
+    "light": 2,
+    "fervor": 0,
+    "text": "If played before a Gift this round, that Gift gains +1 Fervor.",
+    "tags": [
+      "Prayer"
+    ]
+  },
+  {
+    "id": "starter-simple-prayer-2",
+    "name": "Simple Prayer",
+    "type": "Starter",
+    "subtype": "Weapon of Light",
+    "cost": 0,
+    "light": 2,
+    "fervor": 0,
+    "text": "If played before a Gift this round, that Gift gains +1 Fervor.",
+    "tags": [
+      "Prayer"
+    ]
+  },
+  {
+    "id": "starter-attention-1",
+    "name": "Attention",
+    "type": "Starter",
+    "subtype": "Discernment",
+    "cost": 0,
+    "light": 1,
+    "fervor": 0,
+    "text": "Look at the top card of your deck. You may discard it.",
+    "tags": [
+      "Watchfulness"
+    ]
+  },
+  {
+    "id": "starter-attention-2",
+    "name": "Attention",
+    "type": "Starter",
+    "subtype": "Discernment",
+    "cost": 0,
+    "light": 1,
+    "fervor": 0,
+    "text": "Look at the top card of your deck. You may discard it.",
+    "tags": [
+      "Watchfulness"
+    ]
+  },
+  {
+    "id": "starter-service-1",
+    "name": "Service",
+    "type": "Starter",
+    "subtype": "Practical Charity",
+    "cost": 0,
+    "light": 3,
+    "fervor": 0,
+    "text": "In cooperative play, the companion may contribute one additional card this round.",
+    "tags": [
+      "Service"
+    ]
+  },
+  {
+    "id": "starter-service-2",
+    "name": "Service",
+    "type": "Starter",
+    "subtype": "Practical Charity",
+    "cost": 0,
+    "light": 3,
+    "fervor": 0,
+    "text": "In cooperative play, the companion may contribute one additional card this round.",
+    "tags": [
+      "Service"
+    ]
+  },
+  {
+    "id": "starter-resistance-1",
+    "name": "Resistance",
+    "type": "Starter",
+    "subtype": "Combat",
+    "cost": 0,
+    "light": 2,
+    "fervor": 0,
+    "text": "Cancel -1 Light caused by World, Devil, or Flesh.",
+    "tags": [
+      "Fortitude"
+    ]
+  },
+  {
+    "id": "starter-resistance-2",
+    "name": "Resistance",
+    "type": "Starter",
+    "subtype": "Combat",
+    "cost": 0,
+    "light": 2,
+    "fervor": 0,
+    "text": "Cancel -1 Light caused by World, Devil, or Flesh.",
+    "tags": [
+      "Fortitude"
+    ]
+  },
+  {
+    "id": "starter-brief-examen",
+    "name": "Brief Examen",
+    "type": "Starter",
+    "subtype": "Discernment",
+    "cost": 0,
+    "light": 1,
+    "fervor": 0,
+    "text": "If you fail this Trial, treat it as a Failure with Examen.",
+    "tags": [
+      "Examen"
+    ]
+  },
+  {
+    "id": "starter-fragility",
+    "name": "Fragility",
+    "type": "Starter",
+    "subtype": "Wound",
+    "cost": 0,
+    "light": 0,
+    "fervor": 0,
+    "text": "Clutters your hand. It may be removed by purification effects.",
+    "tags": [
+      "Wound"
+    ]
+  },
+  {
+    "id": "sin-pride",
+    "name": "Pride",
+    "type": "Capital Sin",
+    "subtype": "Temptation",
+    "cost": null,
+    "light": 0,
+    "fervor": 0,
+    "text": "Shortcut: +5 Light this round, but +1 Attachment. Humility may purify this card.",
+    "tags": [
+      "Sin",
+      "Pride"
+    ]
+  },
+  {
+    "id": "sin-greed",
+    "name": "Greed",
+    "type": "Capital Sin",
+    "subtype": "Temptation",
+    "cost": null,
+    "light": 0,
+    "fervor": 0,
+    "text": "Shortcut: gain +1 Fruit, but +1 Attachment. Generosity may purify this card.",
+    "tags": [
+      "Sin",
+      "Greed"
+    ]
+  },
+  {
+    "id": "sin-lust",
+    "name": "Lust",
+    "type": "Capital Sin",
+    "subtype": "Temptation",
+    "cost": null,
+    "light": 0,
+    "fervor": 0,
+    "text": "Shortcut: draw 2 cards, but +1 Attachment. Chastity may purify this card.",
+    "tags": [
+      "Sin",
+      "Lust"
+    ]
+  },
+  {
+    "id": "sin-wrath",
+    "name": "Wrath",
+    "type": "Capital Sin",
+    "subtype": "Temptation",
+    "cost": null,
+    "light": 0,
+    "fervor": 0,
+    "text": "Shortcut: +4 Light, but +1 Desolation. Patience may purify this card.",
+    "tags": [
+      "Sin",
+      "Wrath"
+    ]
+  },
+  {
+    "id": "sin-gluttony",
+    "name": "Gluttony",
+    "type": "Capital Sin",
+    "subtype": "Temptation",
+    "cost": null,
+    "light": 0,
+    "fervor": 0,
+    "text": "Shortcut: heal 1 Desolation now, but +1 Attachment. Temperance may purify this card.",
+    "tags": [
+      "Sin",
+      "Gluttony"
+    ]
+  },
+  {
+    "id": "sin-envy",
+    "name": "Envy",
+    "type": "Capital Sin",
+    "subtype": "Temptation",
+    "cost": null,
+    "light": 0,
+    "fervor": 0,
+    "text": "Shortcut: draw 1 card and gain +3 Light, but add Envy to your discard. Charity may purify this card.",
+    "tags": [
+      "Sin",
+      "Envy"
+    ]
+  },
+  {
+    "id": "sin-sloth",
+    "name": "Sloth",
+    "type": "Capital Sin",
+    "subtype": "Temptation",
+    "cost": null,
+    "light": 0,
+    "fervor": 0,
+    "text": "Shortcut: avoid effort, but +1 Desolation. Diligence may purify this card.",
+    "tags": [
+      "Sin",
+      "Sloth"
+    ]
+  },
+  {
+    "id": "virtue-humility",
+    "name": "Humility",
+    "type": "Virtue",
+    "subtype": "Response",
+    "cost": 2,
+    "light": 4,
+    "fervor": 0,
+    "text": "Against Pride, add +4 Light manually and you may purify one Pride.",
+    "tags": [
+      "Virtue"
+    ]
+  },
+  {
+    "id": "virtue-generosity",
+    "name": "Generosity",
+    "type": "Virtue",
+    "subtype": "Response",
+    "cost": 2,
+    "light": 4,
+    "fervor": 0,
+    "text": "Against Greed, add +4 Light manually. You may spend 1 Fruit to gain +1 Communion if you succeed.",
+    "tags": [
+      "Virtue"
+    ]
+  },
+  {
+    "id": "virtue-chastity",
+    "name": "Chastity",
+    "type": "Virtue",
+    "subtype": "Response",
+    "cost": 2,
+    "light": 4,
+    "fervor": 0,
+    "text": "Against Lust, add +4 Light manually. Cancel one Lust or Flesh temptation.",
+    "tags": [
+      "Virtue"
+    ]
+  },
+  {
+    "id": "virtue-patience",
+    "name": "Patience",
+    "type": "Virtue",
+    "subtype": "Response",
+    "cost": 2,
+    "light": 4,
+    "fervor": 0,
+    "text": "Against Wrath, add +4 Light manually. Ignore one reactive penalty.",
+    "tags": [
+      "Virtue"
+    ]
+  },
+  {
+    "id": "virtue-temperance",
+    "name": "Temperance",
+    "type": "Virtue",
+    "subtype": "Response",
+    "cost": 2,
+    "light": 4,
+    "fervor": 0,
+    "text": "Against Gluttony, add +4 Light manually. Fasting and Abstinence gain +1 Light this round.",
+    "tags": [
+      "Virtue"
+    ]
+  },
+  {
+    "id": "virtue-charity",
+    "name": "Charity",
+    "type": "Virtue",
+    "subtype": "Response",
+    "cost": 2,
+    "light": 4,
+    "fervor": 0,
+    "text": "Against Envy, add +4 Light manually. In cooperative play, the companion gains +1 Consolation.",
+    "tags": [
+      "Virtue"
+    ]
+  },
+  {
+    "id": "virtue-diligence",
+    "name": "Diligence",
+    "type": "Virtue",
+    "subtype": "Response",
+    "cost": 2,
+    "light": 4,
+    "fervor": 0,
+    "text": "Against Sloth, add +4 Light manually. You may play one additional card this round.",
+    "tags": [
+      "Virtue"
+    ]
+  },
+  {
+    "id": "gift-wisdom",
+    "name": "Wisdom",
+    "type": "Gift of the Holy Spirit",
+    "subtype": "Actual Grace",
+    "cost": 3,
+    "light": 1,
+    "fervor": 1,
+    "text": "If you did not accept a shortcut this round, you may manually double this card's extra Fervor.",
+    "tags": [
+      "Gift"
+    ]
+  },
+  {
+    "id": "gift-understanding",
+    "name": "Understanding",
+    "type": "Gift of the Holy Spirit",
+    "subtype": "Actual Grace",
+    "cost": 3,
+    "light": 1,
+    "fervor": 1,
+    "text": "Reveal or cancel confusion. Gain +1 Fervor.",
+    "tags": [
+      "Gift"
+    ]
+  },
+  {
+    "id": "gift-counsel",
+    "name": "Counsel",
+    "type": "Gift of the Holy Spirit",
+    "subtype": "Actual Grace",
+    "cost": 3,
+    "light": 1,
+    "fervor": 1,
+    "text": "Change the main sin of the Trial. Gain +1 Fervor.",
+    "tags": [
+      "Gift"
+    ]
+  },
+  {
+    "id": "gift-fortitude",
+    "name": "Fortitude",
+    "type": "Gift of the Holy Spirit",
+    "subtype": "Actual Grace",
+    "cost": 3,
+    "light": 1,
+    "fervor": 1,
+    "text": "Ignore one penalty from Flesh or Desolation. Gain +1 Fervor.",
+    "tags": [
+      "Gift"
+    ]
+  },
+  {
+    "id": "gift-knowledge",
+    "name": "Knowledge",
+    "type": "Gift of the Holy Spirit",
+    "subtype": "Actual Grace",
+    "cost": 3,
+    "light": 1,
+    "fervor": 1,
+    "text": "Look at the next 3 cards of your deck. Gain +1 Fervor.",
+    "tags": [
+      "Gift"
+    ]
+  },
+  {
+    "id": "gift-piety",
+    "name": "Piety",
+    "type": "Gift of the Holy Spirit",
+    "subtype": "Actual Grace",
+    "cost": 3,
+    "light": 1,
+    "fervor": 1,
+    "text": "Heal 1 Desolation. Gain +1 Fervor.",
+    "tags": [
+      "Gift"
+    ]
+  },
+  {
+    "id": "gift-fear-of-the-lord",
+    "name": "Fear of the Lord",
+    "type": "Gift of the Holy Spirit",
+    "subtype": "Actual Grace",
+    "cost": 3,
+    "light": 1,
+    "fervor": 1,
+    "text": "Reject a revealed temptation. If it was strong, gain +1 Consolation and +1 Fervor manually.",
+    "tags": [
+      "Gift"
+    ]
+  },
+  {
+    "id": "sacrament-baptism",
+    "name": "Baptism",
+    "type": "Sacrament",
+    "subtype": "Channel of Grace",
+    "cost": 4,
+    "light": 2,
+    "fervor": 0,
+    "text": "Permanently remove 1 Fragility or Sin from your deck or discard.",
+    "tags": [
+      "Sacrament"
+    ]
+  },
+  {
+    "id": "sacrament-confirmation",
+    "name": "Confirmation",
+    "type": "Sacrament",
+    "subtype": "Channel of Grace",
+    "cost": 4,
+    "light": 2,
+    "fervor": 0,
+    "text": "During this and the next round, Gifts give +1 extra Fervor manually.",
+    "tags": [
+      "Sacrament"
+    ]
+  },
+  {
+    "id": "sacrament-eucharist",
+    "name": "Eucharist",
+    "type": "Sacrament",
+    "subtype": "Channel of Grace",
+    "cost": 4,
+    "light": 2,
+    "fervor": 0,
+    "text": "Recover one card used this round. If there was accompaniment, gain +1 Communion.",
+    "tags": [
+      "Sacrament"
+    ]
+  },
+  {
+    "id": "sacrament-reconciliation",
+    "name": "Reconciliation",
+    "type": "Sacrament",
+    "subtype": "Channel of Grace",
+    "cost": 4,
+    "light": 2,
+    "fervor": 0,
+    "text": "Purify 1 Sin. Convert a failure into a Failure with Examen.",
+    "tags": [
+      "Sacrament"
+    ]
+  },
+  {
+    "id": "sacrament-anointing",
+    "name": "Anointing of the Sick",
+    "type": "Sacrament",
+    "subtype": "Channel of Grace",
+    "cost": 4,
+    "light": 2,
+    "fervor": 0,
+    "text": "Convert up to 2 Desolation into Light this round.",
+    "tags": [
+      "Sacrament"
+    ]
+  },
+  {
+    "id": "sacrament-holy-orders",
+    "name": "Holy Orders",
+    "type": "Sacrament",
+    "subtype": "Channel of Grace",
+    "cost": 4,
+    "light": 2,
+    "fervor": 0,
+    "text": "The next purchase from the Church Row costs 1 less.",
+    "tags": [
+      "Sacrament"
+    ]
+  },
+  {
+    "id": "sacrament-matrimony",
+    "name": "Matrimony",
+    "type": "Sacrament",
+    "subtype": "Channel of Grace",
+    "cost": 4,
+    "light": 2,
+    "fervor": 0,
+    "text": "In cooperative play, both players share +1 Fervor. In solo play, gain +2 Light manually.",
+    "tags": [
+      "Sacrament"
+    ]
+  },
+  {
+    "id": "dark-world",
+    "name": "World",
+    "type": "Dark Banner",
+    "subtype": "Enemy",
+    "cost": null,
+    "light": 0,
+    "fervor": 0,
+    "text": "If you do not play a Virtue this round, gain +1 Attachment.",
+    "tags": [
+      "Enemy"
+    ]
+  },
+  {
+    "id": "dark-devil",
+    "name": "Devil",
+    "type": "Dark Banner",
+    "subtype": "Enemy",
+    "cost": null,
+    "light": 0,
+    "fervor": 0,
+    "text": "The first Virtue played this round does not count unless you play Examen or Understanding.",
+    "tags": [
+      "Enemy"
+    ]
+  },
+  {
+    "id": "dark-flesh",
+    "name": "Flesh",
+    "type": "Dark Banner",
+    "subtype": "Enemy",
+    "cost": null,
+    "light": 0,
+    "fervor": 0,
+    "text": "You may only play 2 cards unless you play Prayer, Fasting, or Temperance.",
+    "tags": [
+      "Enemy"
+    ]
+  },
+  {
+    "id": "mystery-father",
+    "name": "Father",
+    "type": "Mystery",
+    "subtype": "Trinity",
+    "cost": null,
+    "light": 3,
+    "fervor": 1,
+    "text": "Lower Attachment by 1 or cancel World. Order the next cards.",
+    "tags": [
+      "Trinity"
+    ]
+  },
+  {
+    "id": "mystery-son",
+    "name": "Son",
+    "type": "Mystery",
+    "subtype": "Trinity",
+    "cost": null,
+    "light": 3,
+    "fervor": 1,
+    "text": "Turn one consequence into offering. A purified Sin gives double Light this round.",
+    "tags": [
+      "Trinity"
+    ]
+  },
+  {
+    "id": "mystery-holy-spirit",
+    "name": "Holy Spirit",
+    "type": "Mystery",
+    "subtype": "Trinity",
+    "cost": null,
+    "light": 3,
+    "fervor": 1,
+    "text": "Copy a Gift already played. Heal 1 Desolation.",
+    "tags": [
+      "Trinity"
+    ]
+  },
+  {
+    "id": "mystery-trinity",
+    "name": "Most Holy Trinity",
+    "type": "Mystery",
+    "subtype": "Trinity",
+    "cost": null,
+    "light": 3,
+    "fervor": 1,
+    "text": "If Communion is 7+, overcome the Final Choice.",
+    "tags": [
+      "Trinity"
+    ]
+  },
+  {
+    "id": "ally-guardian-angel",
+    "name": "Guardian Angel",
+    "type": "Ally",
+    "subtype": "Saint / Angel / Church",
+    "cost": 4,
+    "light": 2,
+    "fervor": 0,
+    "text": "When you draw a Sin, you may place it on top or bottom of your deck.",
+    "tags": [
+      "Ally"
+    ]
+  },
+  {
+    "id": "ally-st-michael",
+    "name": "Saint Michael the Archangel",
+    "type": "Ally",
+    "subtype": "Saint / Angel / Church",
+    "cost": 4,
+    "light": 2,
+    "fervor": 0,
+    "text": "Against Devil, gain +2 Light and +1 Fervor manually.",
+    "tags": [
+      "Ally"
+    ]
+  },
+  {
+    "id": "ally-st-raphael",
+    "name": "Saint Raphael the Archangel",
+    "type": "Ally",
+    "subtype": "Saint / Angel / Church",
+    "cost": 4,
+    "light": 2,
+    "fervor": 0,
+    "text": "When you heal Desolation, gain +1 Fruit.",
+    "tags": [
+      "Ally"
+    ]
+  },
+  {
+    "id": "ally-st-gabriel",
+    "name": "Saint Gabriel the Archangel",
+    "type": "Ally",
+    "subtype": "Saint / Angel / Church",
+    "cost": 4,
+    "light": 2,
+    "fervor": 0,
+    "text": "Look at another Trial and choose which one to face.",
+    "tags": [
+      "Ally"
+    ]
+  },
+  {
+    "id": "ally-st-ignatius",
+    "name": "Saint Ignatius of Loyola",
+    "type": "Ally",
+    "subtype": "Saint / Angel / Church",
+    "cost": 4,
+    "light": 2,
+    "fervor": 0,
+    "text": "When you play Examen, gain +1 Fervor. If you reject a shortcut, gain +2 Light manually.",
+    "tags": [
+      "Ally"
+    ]
+  },
+  {
+    "id": "ally-st-teresa",
+    "name": "Saint Teresa of Jesus",
+    "type": "Ally",
+    "subtype": "Saint / Angel / Church",
+    "cost": 4,
+    "light": 2,
+    "fervor": 0,
+    "text": "If you have Desolation, Prayer gives +2 Light manually.",
+    "tags": [
+      "Ally"
+    ]
+  },
+  {
+    "id": "ally-st-francis",
+    "name": "Saint Francis of Assisi",
+    "type": "Ally",
+    "subtype": "Saint / Angel / Church",
+    "cost": 4,
+    "light": 2,
+    "fervor": 0,
+    "text": "With Generosity, you may lose 1 Fruit to lower Attachment by 1.",
+    "tags": [
+      "Ally"
+    ]
+  },
+  {
+    "id": "ally-st-joseph",
+    "name": "Saint Joseph",
+    "type": "Ally",
+    "subtype": "Saint / Angel / Church",
+    "cost": 4,
+    "light": 2,
+    "fervor": 0,
+    "text": "Diligence and Silence count against Sloth.",
+    "tags": [
+      "Ally"
+    ]
+  },
+  {
+    "id": "ally-st-monica",
+    "name": "Saint Monica",
+    "type": "Ally",
+    "subtype": "Saint / Angel / Church",
+    "cost": 4,
+    "light": 2,
+    "fervor": 0,
+    "text": "If you fail a Trial, keep one card for the next round.",
+    "tags": [
+      "Ally"
+    ]
+  },
+  {
+    "id": "ally-church",
+    "name": "Holy Catholic Church",
+    "type": "Ally",
+    "subtype": "Saint / Angel / Church",
+    "cost": 4,
+    "light": 2,
+    "fervor": 0,
+    "text": "You may refresh one card in the Church Row. Sacraments cost 1 less manually.",
+    "tags": [
+      "Ally"
+    ]
+  },
+  {
+    "id": "ally-communion-of-saints",
+    "name": "Communion of Saints",
+    "type": "Ally",
+    "subtype": "Saint / Angel / Church",
+    "cost": 4,
+    "light": 2,
+    "fervor": 0,
+    "text": "Use a Saint or Angel from your discard as +2 Light manually.",
+    "tags": [
+      "Ally"
+    ]
+  },
+  {
+    "id": "ally-mary-mother",
+    "name": "Mary, Mother of the Church",
+    "type": "Ally",
+    "subtype": "Saint / Angel / Church",
+    "cost": 4,
+    "light": 2,
+    "fervor": 0,
+    "text": "Once per game, convert Desolation into Consolation.",
+    "tags": [
+      "Ally"
+    ]
+  },
+  {
+    "id": "weapon-prayer",
+    "name": "Prayer",
+    "type": "Weapon of Light",
+    "subtype": "Spiritual Practice",
+    "cost": 1,
+    "light": 2,
+    "fervor": 0,
+    "text": "If played before a Gift, add +1 Fervor manually.",
+    "tags": [
+      "Weapon"
+    ]
+  },
+  {
+    "id": "weapon-fasting",
+    "name": "Fasting",
+    "type": "Weapon of Light",
+    "subtype": "Spiritual Practice",
+    "cost": 1,
+    "light": 1,
+    "fervor": 1,
+    "text": "Cancel Flesh or Gluttony. You may play one fewer card to gain +1 Fervor.",
+    "tags": [
+      "Weapon"
+    ]
+  },
+  {
+    "id": "weapon-abstinence",
+    "name": "Abstinence",
+    "type": "Weapon of Light",
+    "subtype": "Spiritual Practice",
+    "cost": 1,
+    "light": 2,
+    "fervor": 0,
+    "text": "Cancel Lust or Gluttony. Otherwise, prepare +2 Light for the next round.",
+    "tags": [
+      "Weapon"
+    ]
+  },
+  {
+    "id": "weapon-examen",
+    "name": "Examen",
+    "type": "Weapon of Light",
+    "subtype": "Spiritual Practice",
+    "cost": 1,
+    "light": 1,
+    "fervor": 0,
+    "text": "Reveal a lie. If you fail, count it as Failure with Examen.",
+    "tags": [
+      "Weapon"
+    ]
+  },
+  {
+    "id": "weapon-word",
+    "name": "Word",
+    "type": "Weapon of Light",
+    "subtype": "Spiritual Practice",
+    "cost": 1,
+    "light": 2,
+    "fervor": 0,
+    "text": "Return a Virtue from your discard to your hand.",
+    "tags": [
+      "Weapon"
+    ]
+  },
+  {
+    "id": "weapon-almsgiving",
+    "name": "Almsgiving",
+    "type": "Weapon of Light",
+    "subtype": "Spiritual Practice",
+    "cost": 1,
+    "light": 3,
+    "fervor": 0,
+    "text": "Spend 1 Fruit to gain +1 Communion against Greed or Envy.",
+    "tags": [
+      "Weapon"
+    ]
+  },
+  {
+    "id": "weapon-silence",
+    "name": "Silence",
+    "type": "Weapon of Light",
+    "subtype": "Spiritual Practice",
+    "cost": 1,
+    "light": 1,
+    "fervor": 0,
+    "text": "Cancel World or reduce Desolation by 1.",
+    "tags": [
+      "Weapon"
+    ]
+  },
+  {
+    "id": "weapon-watchfulness",
+    "name": "Watchfulness",
+    "type": "Weapon of Light",
+    "subtype": "Spiritual Practice",
+    "cost": 1,
+    "light": 1,
+    "fervor": 0,
+    "text": "Look at the next 2 Dark Banner cards.",
+    "tags": [
+      "Weapon"
+    ]
+  },
+  {
+    "id": "weapon-perseverance",
+    "name": "Perseverance",
+    "type": "Weapon of Light",
+    "subtype": "Spiritual Practice",
+    "cost": 1,
+    "light": 3,
+    "fervor": 0,
+    "text": "If you failed the previous round, gain +3 Light and you may play one extra card.",
+    "tags": [
+      "Weapon"
+    ]
+  },
+  {
+    "id": "trial-correction-before-others",
+    "name": "You are corrected in front of others",
+    "type": "Life Trial",
+    "subtype": "Quest",
+    "cost": null,
+    "light": null,
+    "fervor": null,
+    "text": "Sin: Pride / Wrath. Darkness 8. Shortcut: Answer with irony: +5 Light, +1 Attachment. Clean victory: +1 Communion, +3 Fruits.",
+    "tags": [
+      "Trial"
+    ]
+  },
+  {
+    "id": "trial-someone-gets-recognition",
+    "name": "Someone receives the recognition you wanted",
+    "type": "Life Trial",
+    "subtype": "Quest",
+    "cost": null,
+    "light": null,
+    "fervor": null,
+    "text": "Sin: Envy. Darkness 7. Shortcut: Minimize it: draw 1 and gain +3 Light, add Envy. Clean victory: +1 Communion, +3 Fruits.",
+    "tags": [
+      "Trial"
+    ]
+  },
+  {
+    "id": "trial-money-and-need",
+    "name": "You have extra money and someone needs help",
+    "type": "Life Trial",
+    "subtype": "Quest",
+    "cost": null,
+    "light": null,
+    "fervor": null,
+    "text": "Sin: Greed. Darkness 6. Shortcut: Keep it for security: +1 Fruit, +1 Attachment. Clean victory: +1 Communion, +3 Fruits.",
+    "tags": [
+      "Trial"
+    ]
+  },
+  {
+    "id": "trial-tired-and-prayer",
+    "name": "You are tired and it is time to pray",
+    "type": "Life Trial",
+    "subtype": "Quest",
+    "cost": null,
+    "light": null,
+    "fervor": null,
+    "text": "Sin: Sloth. Darkness 5. Shortcut: Leave it for tomorrow: +1 Desolation. Clean victory: +1 Communion, +3 Fruits.",
+    "tags": [
+      "Trial"
+    ]
+  },
+  {
+    "id": "trial-humiliation",
+    "name": "You receive a humiliation",
+    "type": "Life Trial",
+    "subtype": "Quest",
+    "cost": null,
+    "light": null,
+    "fervor": null,
+    "text": "Sin: Pride / Wrath. Darkness 9. Shortcut: Justify yourself aggressively: +5 Light, +1 Attachment. Clean victory: +1 Communion, +3 Fruits.",
+    "tags": [
+      "Trial"
+    ]
+  },
+  {
+    "id": "trial-disordered-memory",
+    "name": "An image or memory disorders your desire",
+    "type": "Life Trial",
+    "subtype": "Quest",
+    "cost": null,
+    "light": null,
+    "fervor": null,
+    "text": "Sin: Lust. Darkness 8. Shortcut: Dwell on it: draw 2, +1 Attachment. Clean victory: +1 Communion, +3 Fruits.",
+    "tags": [
+      "Trial"
+    ]
+  },
+  {
+    "id": "trial-excess-to-avoid-emptiness",
+    "name": "You eat, buy, or scroll too much to avoid emptiness",
+    "type": "Life Trial",
+    "subtype": "Quest",
+    "cost": null,
+    "light": null,
+    "fervor": null,
+    "text": "Sin: Gluttony. Darkness 7. Shortcut: Anesthetize yourself: heal 1 Desolation, +1 Attachment. Clean victory: +1 Communion, +3 Fruits.",
+    "tags": [
+      "Trial"
+    ]
+  },
+  {
+    "id": "trial-truth-or-appearance",
+    "name": "Choose between looking good and telling the truth",
+    "type": "Life Trial",
+    "subtype": "Quest",
+    "cost": null,
+    "light": null,
+    "fervor": null,
+    "text": "Sin: World / Pride. Darkness 10. Shortcut: Look good: complete the Trial without Communion and add World. Clean victory: +1 Communion, +3 Fruits.",
+    "tags": [
+      "Trial"
+    ]
+  },
+  {
+    "id": "trial-ask-for-forgiveness",
+    "name": "You must ask for forgiveness first",
+    "type": "Life Trial",
+    "subtype": "Quest",
+    "cost": null,
+    "light": null,
+    "fervor": null,
+    "text": "Sin: Pride. Darkness 7. Shortcut: Wait for the other to yield: +4 Light, +1 Attachment. Clean victory: +1 Communion, +3 Fruits.",
+    "tags": [
+      "Trial"
+    ]
+  },
+  {
+    "id": "trial-small-task-heavy",
+    "name": "A small task feels heavy",
+    "type": "Life Trial",
+    "subtype": "Quest",
+    "cost": null,
+    "light": null,
+    "fervor": null,
+    "text": "Sin: Sloth. Darkness 5. Shortcut: Postpone it: draw 1, +1 Desolation. Clean victory: +1 Communion, +3 Fruits.",
+    "tags": [
+      "Trial"
+    ]
+  },
+  {
+    "id": "trial-provoked-conversation",
+    "name": "You are provoked in conversation",
+    "type": "Life Trial",
+    "subtype": "Quest",
+    "cost": null,
+    "light": null,
+    "fervor": null,
+    "text": "Sin: Wrath. Darkness 8. Shortcut: Answer harshly: +5 Light, add Wrath. Clean victory: +1 Communion, +3 Fruits.",
+    "tags": [
+      "Trial"
+    ]
+  },
+  {
+    "id": "trial-judge-another",
+    "name": "You see someone fall and can judge them",
+    "type": "Life Trial",
+    "subtype": "Quest",
+    "cost": null,
+    "light": null,
+    "fervor": null,
+    "text": "Sin: Pride / Envy. Darkness 7. Shortcut: Feel superior: +3 Light, +1 Attachment. Clean victory: +1 Communion, +3 Fruits.",
+    "tags": [
+      "Trial"
+    ]
+  },
+  {
+    "id": "trial-unseen-service",
+    "name": "You can serve without being seen",
+    "type": "Life Trial",
+    "subtype": "Quest",
+    "cost": null,
+    "light": null,
+    "fervor": null,
+    "text": "Sin: World / Sloth. Darkness 6. Shortcut: Avoid it because nobody will see: +1 Fruit, +1 Desolation. Clean victory: +1 Communion, +3 Fruits.",
+    "tags": [
+      "Trial"
+    ]
+  },
+  {
+    "id": "trial-noise-prevents-listening",
+    "name": "Noise prevents you from listening",
+    "type": "Life Trial",
+    "subtype": "Quest",
+    "cost": null,
+    "light": null,
+    "fervor": null,
+    "text": "Sin: World. Darkness 5. Shortcut: Distract yourself: draw 2, discard 1. Clean victory: +1 Communion, +3 Fruits.",
+    "tags": [
+      "Trial"
+    ]
+  },
+  {
+    "id": "trial-important-discernment",
+    "name": "You must discern an important decision",
+    "type": "Life Trial",
+    "subtype": "Quest",
+    "cost": null,
+    "light": null,
+    "fervor": null,
+    "text": "Sin: Devil / Confusion. Darkness 11. Shortcut: Choose what is comfortable: +4 Light, +1 Attachment. Clean victory: +1 Communion, +3 Fruits.",
+    "tags": [
+      "Trial"
+    ]
+  },
+  {
+    "id": "trial-old-wound",
+    "name": "An old wound is triggered",
+    "type": "Life Trial",
+    "subtype": "Quest",
+    "cost": null,
+    "light": null,
+    "fervor": null,
+    "text": "Sin: Wrath / Desolation. Darkness 9. Shortcut: Close yourself off: avoid consequence, +1 Desolation. Clean victory: +1 Communion, +3 Fruits.",
+    "tags": [
+      "Trial"
+    ]
+  },
+  {
+    "id": "trial-small-truth-manipulation",
+    "name": "You can manipulate a small truth",
+    "type": "Life Trial",
+    "subtype": "Quest",
+    "cost": null,
+    "light": null,
+    "fervor": null,
+    "text": "Sin: Devil / Pride. Darkness 8. Shortcut: Useful half-truth: +5 Light, add Devil. Clean victory: +1 Communion, +3 Fruits.",
+    "tags": [
+      "Trial"
+    ]
+  },
+  {
+    "id": "trial-body-wants-comfort",
+    "name": "The body asks for immediate comfort",
+    "type": "Life Trial",
+    "subtype": "Quest",
+    "cost": null,
+    "light": null,
+    "fervor": null,
+    "text": "Sin: Flesh / Gluttony. Darkness 6. Shortcut: Yield without measure: +3 Light, +1 Attachment. Clean victory: +1 Communion, +3 Fruits.",
+    "tags": [
+      "Trial"
+    ]
+  },
+  {
+    "id": "trial-dry-prayer",
+    "name": "You feel dryness in prayer",
+    "type": "Life Trial",
+    "subtype": "Quest",
+    "cost": null,
+    "light": null,
+    "fervor": null,
+    "text": "Sin: Desolation / Sloth. Darkness 7. Shortcut: Abandon it: draw 1, +1 Desolation. Clean victory: +1 Communion, +3 Fruits.",
+    "tags": [
+      "Trial"
+    ]
+  },
+  {
+    "id": "trial-rejoice-for-other",
+    "name": "You must rejoice for another person",
+    "type": "Life Trial",
+    "subtype": "Quest",
+    "cost": null,
+    "light": null,
+    "fervor": null,
+    "text": "Sin: Envy. Darkness 6. Shortcut: Congratulate externally, resent internally: +4 Light, +1 Attachment. Clean victory: +1 Communion, +3 Fruits.",
+    "tags": [
+      "Trial"
+    ]
+  },
+  {
+    "id": "trial-unjust-gain",
+    "name": "You are offered unjust gain",
+    "type": "Life Trial",
+    "subtype": "Quest",
+    "cost": null,
+    "light": null,
+    "fervor": null,
+    "text": "Sin: Greed / Devil. Darkness 10. Shortcut: Take advantage: +2 Fruits, +2 Attachment. Clean victory: +1 Communion, +3 Fruits.",
+    "tags": [
+      "Trial"
+    ]
+  },
+  {
+    "id": "trial-community-needs-you",
+    "name": "The community needs you",
+    "type": "Life Trial",
+    "subtype": "Quest",
+    "cost": null,
+    "light": null,
+    "fervor": null,
+    "text": "Sin: Sloth / World. Darkness 8. Shortcut: Hide: avoid spending cards, +1 Desolation. Clean victory: +1 Communion, +3 Fruits.",
+    "tags": [
+      "Trial"
+    ]
+  },
+  {
+    "id": "trial-ideal-life-comparison",
+    "name": "You compare yourself with your ideal life",
+    "type": "Life Trial",
+    "subtype": "Quest",
+    "cost": null,
+    "light": null,
+    "fervor": null,
+    "text": "Sin: World / Envy. Darkness 7. Shortcut: Fantasize and despise the present: draw 2, +1 Attachment. Clean victory: +1 Communion, +3 Fruits.",
+    "tags": [
+      "Trial"
+    ]
+  },
+  {
+    "id": "trial-final-choice",
+    "name": "Final Choice: under which banner will you live?",
+    "type": "Life Trial",
+    "subtype": "Quest",
+    "cost": null,
+    "light": null,
+    "fervor": null,
+    "text": "Sin: Final. Darkness 10. Shortcut: Add +2 Darkness for each Attachment above 5. Clean victory: +1 Communion, +3 Fruits.",
+    "tags": [
+      "Trial"
+    ]
+  }
+]

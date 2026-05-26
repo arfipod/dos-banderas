@@ -1,0 +1,387 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Dos Banderas Print and Play Cards</title>
+<style>
+*{box-sizing:border-box}
+body{margin:0;background:#ddd;font-family:Georgia,serif}
+.toolbar{position:sticky;top:0;background:#111;color:#fff;padding:12px;font-family:system-ui;z-index:2}
+.sheet{width:210mm;min-height:297mm;margin:10mm auto;background:white;padding:8mm;display:grid;grid-template-columns:repeat(3,63mm);grid-auto-rows:88mm;gap:2.5mm;break-after:page}
+.card{width:63mm;height:88mm;border:0.35mm solid #222;border-radius:3mm;background:#fffaf0;overflow:hidden;display:flex;flex-direction:column}
+.card header{background:#f0e5d2;border-bottom:0.25mm solid #222;padding:2mm}
+.card h3{margin:0;font-size:10pt;line-height:1.05}
+.card header p{margin:1mm 0 0;font-family:system-ui;font-size:5.6pt;text-transform:uppercase;font-weight:800;color:#5d5145}
+.stats{display:grid;grid-template-columns:repeat(3,1fr);border-bottom:0.25mm solid #222;font-family:system-ui}
+.stats span{text-align:center;padding:1.2mm;border-right:0.2mm solid #222}
+.stats span:last-child{border-right:0}
+.stats b{display:block;font-size:11pt}.stats small{display:block;font-size:5pt;text-transform:uppercase;color:#666}
+.card>p{padding:2.2mm;margin:0;font-size:8pt;line-height:1.2}
+@media print{.toolbar{display:none}.sheet{margin:0;box-shadow:none}@page{size:A4 portrait;margin:0}}
+</style>
+</head>
+<body>
+<div class="toolbar"><button onclick="window.print()">Print</button> 90 cards · 63×88mm · A4</div>
+<main class="sheet"><article class="card">
+<header><h3>Simple Prayer</h3><p>Starter · Weapon of Light</p></header>
+<div class="stats"><span><b>0</b><small>Cost</small></span><span><b>2</b><small>Light</small></span><span><b>0</b><small>Fervor</small></span></div>
+<p>If played before a Gift this round, that Gift gains +1 Fervor.</p>
+</article><article class="card">
+<header><h3>Simple Prayer</h3><p>Starter · Weapon of Light</p></header>
+<div class="stats"><span><b>0</b><small>Cost</small></span><span><b>2</b><small>Light</small></span><span><b>0</b><small>Fervor</small></span></div>
+<p>If played before a Gift this round, that Gift gains +1 Fervor.</p>
+</article><article class="card">
+<header><h3>Attention</h3><p>Starter · Discernment</p></header>
+<div class="stats"><span><b>0</b><small>Cost</small></span><span><b>1</b><small>Light</small></span><span><b>0</b><small>Fervor</small></span></div>
+<p>Look at the top card of your deck. You may discard it.</p>
+</article><article class="card">
+<header><h3>Attention</h3><p>Starter · Discernment</p></header>
+<div class="stats"><span><b>0</b><small>Cost</small></span><span><b>1</b><small>Light</small></span><span><b>0</b><small>Fervor</small></span></div>
+<p>Look at the top card of your deck. You may discard it.</p>
+</article><article class="card">
+<header><h3>Service</h3><p>Starter · Practical Charity</p></header>
+<div class="stats"><span><b>0</b><small>Cost</small></span><span><b>3</b><small>Light</small></span><span><b>0</b><small>Fervor</small></span></div>
+<p>In cooperative play, the companion may contribute one additional card this round.</p>
+</article><article class="card">
+<header><h3>Service</h3><p>Starter · Practical Charity</p></header>
+<div class="stats"><span><b>0</b><small>Cost</small></span><span><b>3</b><small>Light</small></span><span><b>0</b><small>Fervor</small></span></div>
+<p>In cooperative play, the companion may contribute one additional card this round.</p>
+</article><article class="card">
+<header><h3>Resistance</h3><p>Starter · Combat</p></header>
+<div class="stats"><span><b>0</b><small>Cost</small></span><span><b>2</b><small>Light</small></span><span><b>0</b><small>Fervor</small></span></div>
+<p>Cancel -1 Light caused by World, Devil, or Flesh.</p>
+</article><article class="card">
+<header><h3>Resistance</h3><p>Starter · Combat</p></header>
+<div class="stats"><span><b>0</b><small>Cost</small></span><span><b>2</b><small>Light</small></span><span><b>0</b><small>Fervor</small></span></div>
+<p>Cancel -1 Light caused by World, Devil, or Flesh.</p>
+</article><article class="card">
+<header><h3>Brief Examen</h3><p>Starter · Discernment</p></header>
+<div class="stats"><span><b>0</b><small>Cost</small></span><span><b>1</b><small>Light</small></span><span><b>0</b><small>Fervor</small></span></div>
+<p>If you fail this Trial, treat it as a Failure with Examen.</p>
+</article></main><main class="sheet"><article class="card">
+<header><h3>Fragility</h3><p>Starter · Wound</p></header>
+<div class="stats"><span><b>0</b><small>Cost</small></span><span><b>0</b><small>Light</small></span><span><b>0</b><small>Fervor</small></span></div>
+<p>Clutters your hand. It may be removed by purification effects.</p>
+</article><article class="card">
+<header><h3>Pride</h3><p>Capital Sin · Temptation</p></header>
+<div class="stats"><span><b>—</b><small>Cost</small></span><span><b>0</b><small>Light</small></span><span><b>0</b><small>Fervor</small></span></div>
+<p>Shortcut: +5 Light this round, but +1 Attachment. Humility may purify this card.</p>
+</article><article class="card">
+<header><h3>Greed</h3><p>Capital Sin · Temptation</p></header>
+<div class="stats"><span><b>—</b><small>Cost</small></span><span><b>0</b><small>Light</small></span><span><b>0</b><small>Fervor</small></span></div>
+<p>Shortcut: gain +1 Fruit, but +1 Attachment. Generosity may purify this card.</p>
+</article><article class="card">
+<header><h3>Lust</h3><p>Capital Sin · Temptation</p></header>
+<div class="stats"><span><b>—</b><small>Cost</small></span><span><b>0</b><small>Light</small></span><span><b>0</b><small>Fervor</small></span></div>
+<p>Shortcut: draw 2 cards, but +1 Attachment. Chastity may purify this card.</p>
+</article><article class="card">
+<header><h3>Wrath</h3><p>Capital Sin · Temptation</p></header>
+<div class="stats"><span><b>—</b><small>Cost</small></span><span><b>0</b><small>Light</small></span><span><b>0</b><small>Fervor</small></span></div>
+<p>Shortcut: +4 Light, but +1 Desolation. Patience may purify this card.</p>
+</article><article class="card">
+<header><h3>Gluttony</h3><p>Capital Sin · Temptation</p></header>
+<div class="stats"><span><b>—</b><small>Cost</small></span><span><b>0</b><small>Light</small></span><span><b>0</b><small>Fervor</small></span></div>
+<p>Shortcut: heal 1 Desolation now, but +1 Attachment. Temperance may purify this card.</p>
+</article><article class="card">
+<header><h3>Envy</h3><p>Capital Sin · Temptation</p></header>
+<div class="stats"><span><b>—</b><small>Cost</small></span><span><b>0</b><small>Light</small></span><span><b>0</b><small>Fervor</small></span></div>
+<p>Shortcut: draw 1 card and gain +3 Light, but add Envy to your discard. Charity may purify this card.</p>
+</article><article class="card">
+<header><h3>Sloth</h3><p>Capital Sin · Temptation</p></header>
+<div class="stats"><span><b>—</b><small>Cost</small></span><span><b>0</b><small>Light</small></span><span><b>0</b><small>Fervor</small></span></div>
+<p>Shortcut: avoid effort, but +1 Desolation. Diligence may purify this card.</p>
+</article><article class="card">
+<header><h3>Humility</h3><p>Virtue · Response</p></header>
+<div class="stats"><span><b>2</b><small>Cost</small></span><span><b>4</b><small>Light</small></span><span><b>0</b><small>Fervor</small></span></div>
+<p>Against Pride, add +4 Light manually and you may purify one Pride.</p>
+</article></main><main class="sheet"><article class="card">
+<header><h3>Generosity</h3><p>Virtue · Response</p></header>
+<div class="stats"><span><b>2</b><small>Cost</small></span><span><b>4</b><small>Light</small></span><span><b>0</b><small>Fervor</small></span></div>
+<p>Against Greed, add +4 Light manually. You may spend 1 Fruit to gain +1 Communion if you succeed.</p>
+</article><article class="card">
+<header><h3>Chastity</h3><p>Virtue · Response</p></header>
+<div class="stats"><span><b>2</b><small>Cost</small></span><span><b>4</b><small>Light</small></span><span><b>0</b><small>Fervor</small></span></div>
+<p>Against Lust, add +4 Light manually. Cancel one Lust or Flesh temptation.</p>
+</article><article class="card">
+<header><h3>Patience</h3><p>Virtue · Response</p></header>
+<div class="stats"><span><b>2</b><small>Cost</small></span><span><b>4</b><small>Light</small></span><span><b>0</b><small>Fervor</small></span></div>
+<p>Against Wrath, add +4 Light manually. Ignore one reactive penalty.</p>
+</article><article class="card">
+<header><h3>Temperance</h3><p>Virtue · Response</p></header>
+<div class="stats"><span><b>2</b><small>Cost</small></span><span><b>4</b><small>Light</small></span><span><b>0</b><small>Fervor</small></span></div>
+<p>Against Gluttony, add +4 Light manually. Fasting and Abstinence gain +1 Light this round.</p>
+</article><article class="card">
+<header><h3>Charity</h3><p>Virtue · Response</p></header>
+<div class="stats"><span><b>2</b><small>Cost</small></span><span><b>4</b><small>Light</small></span><span><b>0</b><small>Fervor</small></span></div>
+<p>Against Envy, add +4 Light manually. In cooperative play, the companion gains +1 Consolation.</p>
+</article><article class="card">
+<header><h3>Diligence</h3><p>Virtue · Response</p></header>
+<div class="stats"><span><b>2</b><small>Cost</small></span><span><b>4</b><small>Light</small></span><span><b>0</b><small>Fervor</small></span></div>
+<p>Against Sloth, add +4 Light manually. You may play one additional card this round.</p>
+</article><article class="card">
+<header><h3>Wisdom</h3><p>Gift of the Holy Spirit · Actual Grace</p></header>
+<div class="stats"><span><b>3</b><small>Cost</small></span><span><b>1</b><small>Light</small></span><span><b>1</b><small>Fervor</small></span></div>
+<p>If you did not accept a shortcut this round, you may manually double this card's extra Fervor.</p>
+</article><article class="card">
+<header><h3>Understanding</h3><p>Gift of the Holy Spirit · Actual Grace</p></header>
+<div class="stats"><span><b>3</b><small>Cost</small></span><span><b>1</b><small>Light</small></span><span><b>1</b><small>Fervor</small></span></div>
+<p>Reveal or cancel confusion. Gain +1 Fervor.</p>
+</article><article class="card">
+<header><h3>Counsel</h3><p>Gift of the Holy Spirit · Actual Grace</p></header>
+<div class="stats"><span><b>3</b><small>Cost</small></span><span><b>1</b><small>Light</small></span><span><b>1</b><small>Fervor</small></span></div>
+<p>Change the main sin of the Trial. Gain +1 Fervor.</p>
+</article></main><main class="sheet"><article class="card">
+<header><h3>Fortitude</h3><p>Gift of the Holy Spirit · Actual Grace</p></header>
+<div class="stats"><span><b>3</b><small>Cost</small></span><span><b>1</b><small>Light</small></span><span><b>1</b><small>Fervor</small></span></div>
+<p>Ignore one penalty from Flesh or Desolation. Gain +1 Fervor.</p>
+</article><article class="card">
+<header><h3>Knowledge</h3><p>Gift of the Holy Spirit · Actual Grace</p></header>
+<div class="stats"><span><b>3</b><small>Cost</small></span><span><b>1</b><small>Light</small></span><span><b>1</b><small>Fervor</small></span></div>
+<p>Look at the next 3 cards of your deck. Gain +1 Fervor.</p>
+</article><article class="card">
+<header><h3>Piety</h3><p>Gift of the Holy Spirit · Actual Grace</p></header>
+<div class="stats"><span><b>3</b><small>Cost</small></span><span><b>1</b><small>Light</small></span><span><b>1</b><small>Fervor</small></span></div>
+<p>Heal 1 Desolation. Gain +1 Fervor.</p>
+</article><article class="card">
+<header><h3>Fear of the Lord</h3><p>Gift of the Holy Spirit · Actual Grace</p></header>
+<div class="stats"><span><b>3</b><small>Cost</small></span><span><b>1</b><small>Light</small></span><span><b>1</b><small>Fervor</small></span></div>
+<p>Reject a revealed temptation. If it was strong, gain +1 Consolation and +1 Fervor manually.</p>
+</article><article class="card">
+<header><h3>Baptism</h3><p>Sacrament · Channel of Grace</p></header>
+<div class="stats"><span><b>4</b><small>Cost</small></span><span><b>2</b><small>Light</small></span><span><b>0</b><small>Fervor</small></span></div>
+<p>Permanently remove 1 Fragility or Sin from your deck or discard.</p>
+</article><article class="card">
+<header><h3>Confirmation</h3><p>Sacrament · Channel of Grace</p></header>
+<div class="stats"><span><b>4</b><small>Cost</small></span><span><b>2</b><small>Light</small></span><span><b>0</b><small>Fervor</small></span></div>
+<p>During this and the next round, Gifts give +1 extra Fervor manually.</p>
+</article><article class="card">
+<header><h3>Eucharist</h3><p>Sacrament · Channel of Grace</p></header>
+<div class="stats"><span><b>4</b><small>Cost</small></span><span><b>2</b><small>Light</small></span><span><b>0</b><small>Fervor</small></span></div>
+<p>Recover one card used this round. If there was accompaniment, gain +1 Communion.</p>
+</article><article class="card">
+<header><h3>Reconciliation</h3><p>Sacrament · Channel of Grace</p></header>
+<div class="stats"><span><b>4</b><small>Cost</small></span><span><b>2</b><small>Light</small></span><span><b>0</b><small>Fervor</small></span></div>
+<p>Purify 1 Sin. Convert a failure into a Failure with Examen.</p>
+</article><article class="card">
+<header><h3>Anointing of the Sick</h3><p>Sacrament · Channel of Grace</p></header>
+<div class="stats"><span><b>4</b><small>Cost</small></span><span><b>2</b><small>Light</small></span><span><b>0</b><small>Fervor</small></span></div>
+<p>Convert up to 2 Desolation into Light this round.</p>
+</article></main><main class="sheet"><article class="card">
+<header><h3>Holy Orders</h3><p>Sacrament · Channel of Grace</p></header>
+<div class="stats"><span><b>4</b><small>Cost</small></span><span><b>2</b><small>Light</small></span><span><b>0</b><small>Fervor</small></span></div>
+<p>The next purchase from the Church Row costs 1 less.</p>
+</article><article class="card">
+<header><h3>Matrimony</h3><p>Sacrament · Channel of Grace</p></header>
+<div class="stats"><span><b>4</b><small>Cost</small></span><span><b>2</b><small>Light</small></span><span><b>0</b><small>Fervor</small></span></div>
+<p>In cooperative play, both players share +1 Fervor. In solo play, gain +2 Light manually.</p>
+</article><article class="card">
+<header><h3>World</h3><p>Dark Banner · Enemy</p></header>
+<div class="stats"><span><b>—</b><small>Cost</small></span><span><b>0</b><small>Light</small></span><span><b>0</b><small>Fervor</small></span></div>
+<p>If you do not play a Virtue this round, gain +1 Attachment.</p>
+</article><article class="card">
+<header><h3>Devil</h3><p>Dark Banner · Enemy</p></header>
+<div class="stats"><span><b>—</b><small>Cost</small></span><span><b>0</b><small>Light</small></span><span><b>0</b><small>Fervor</small></span></div>
+<p>The first Virtue played this round does not count unless you play Examen or Understanding.</p>
+</article><article class="card">
+<header><h3>Flesh</h3><p>Dark Banner · Enemy</p></header>
+<div class="stats"><span><b>—</b><small>Cost</small></span><span><b>0</b><small>Light</small></span><span><b>0</b><small>Fervor</small></span></div>
+<p>You may only play 2 cards unless you play Prayer, Fasting, or Temperance.</p>
+</article><article class="card">
+<header><h3>Father</h3><p>Mystery · Trinity</p></header>
+<div class="stats"><span><b>—</b><small>Cost</small></span><span><b>3</b><small>Light</small></span><span><b>1</b><small>Fervor</small></span></div>
+<p>Lower Attachment by 1 or cancel World. Order the next cards.</p>
+</article><article class="card">
+<header><h3>Son</h3><p>Mystery · Trinity</p></header>
+<div class="stats"><span><b>—</b><small>Cost</small></span><span><b>3</b><small>Light</small></span><span><b>1</b><small>Fervor</small></span></div>
+<p>Turn one consequence into offering. A purified Sin gives double Light this round.</p>
+</article><article class="card">
+<header><h3>Holy Spirit</h3><p>Mystery · Trinity</p></header>
+<div class="stats"><span><b>—</b><small>Cost</small></span><span><b>3</b><small>Light</small></span><span><b>1</b><small>Fervor</small></span></div>
+<p>Copy a Gift already played. Heal 1 Desolation.</p>
+</article><article class="card">
+<header><h3>Most Holy Trinity</h3><p>Mystery · Trinity</p></header>
+<div class="stats"><span><b>—</b><small>Cost</small></span><span><b>3</b><small>Light</small></span><span><b>1</b><small>Fervor</small></span></div>
+<p>If Communion is 7+, overcome the Final Choice.</p>
+</article></main><main class="sheet"><article class="card">
+<header><h3>Guardian Angel</h3><p>Ally · Saint / Angel / Church</p></header>
+<div class="stats"><span><b>4</b><small>Cost</small></span><span><b>2</b><small>Light</small></span><span><b>0</b><small>Fervor</small></span></div>
+<p>When you draw a Sin, you may place it on top or bottom of your deck.</p>
+</article><article class="card">
+<header><h3>Saint Michael the Archangel</h3><p>Ally · Saint / Angel / Church</p></header>
+<div class="stats"><span><b>4</b><small>Cost</small></span><span><b>2</b><small>Light</small></span><span><b>0</b><small>Fervor</small></span></div>
+<p>Against Devil, gain +2 Light and +1 Fervor manually.</p>
+</article><article class="card">
+<header><h3>Saint Raphael the Archangel</h3><p>Ally · Saint / Angel / Church</p></header>
+<div class="stats"><span><b>4</b><small>Cost</small></span><span><b>2</b><small>Light</small></span><span><b>0</b><small>Fervor</small></span></div>
+<p>When you heal Desolation, gain +1 Fruit.</p>
+</article><article class="card">
+<header><h3>Saint Gabriel the Archangel</h3><p>Ally · Saint / Angel / Church</p></header>
+<div class="stats"><span><b>4</b><small>Cost</small></span><span><b>2</b><small>Light</small></span><span><b>0</b><small>Fervor</small></span></div>
+<p>Look at another Trial and choose which one to face.</p>
+</article><article class="card">
+<header><h3>Saint Ignatius of Loyola</h3><p>Ally · Saint / Angel / Church</p></header>
+<div class="stats"><span><b>4</b><small>Cost</small></span><span><b>2</b><small>Light</small></span><span><b>0</b><small>Fervor</small></span></div>
+<p>When you play Examen, gain +1 Fervor. If you reject a shortcut, gain +2 Light manually.</p>
+</article><article class="card">
+<header><h3>Saint Teresa of Jesus</h3><p>Ally · Saint / Angel / Church</p></header>
+<div class="stats"><span><b>4</b><small>Cost</small></span><span><b>2</b><small>Light</small></span><span><b>0</b><small>Fervor</small></span></div>
+<p>If you have Desolation, Prayer gives +2 Light manually.</p>
+</article><article class="card">
+<header><h3>Saint Francis of Assisi</h3><p>Ally · Saint / Angel / Church</p></header>
+<div class="stats"><span><b>4</b><small>Cost</small></span><span><b>2</b><small>Light</small></span><span><b>0</b><small>Fervor</small></span></div>
+<p>With Generosity, you may lose 1 Fruit to lower Attachment by 1.</p>
+</article><article class="card">
+<header><h3>Saint Joseph</h3><p>Ally · Saint / Angel / Church</p></header>
+<div class="stats"><span><b>4</b><small>Cost</small></span><span><b>2</b><small>Light</small></span><span><b>0</b><small>Fervor</small></span></div>
+<p>Diligence and Silence count against Sloth.</p>
+</article><article class="card">
+<header><h3>Saint Monica</h3><p>Ally · Saint / Angel / Church</p></header>
+<div class="stats"><span><b>4</b><small>Cost</small></span><span><b>2</b><small>Light</small></span><span><b>0</b><small>Fervor</small></span></div>
+<p>If you fail a Trial, keep one card for the next round.</p>
+</article></main><main class="sheet"><article class="card">
+<header><h3>Holy Catholic Church</h3><p>Ally · Saint / Angel / Church</p></header>
+<div class="stats"><span><b>4</b><small>Cost</small></span><span><b>2</b><small>Light</small></span><span><b>0</b><small>Fervor</small></span></div>
+<p>You may refresh one card in the Church Row. Sacraments cost 1 less manually.</p>
+</article><article class="card">
+<header><h3>Communion of Saints</h3><p>Ally · Saint / Angel / Church</p></header>
+<div class="stats"><span><b>4</b><small>Cost</small></span><span><b>2</b><small>Light</small></span><span><b>0</b><small>Fervor</small></span></div>
+<p>Use a Saint or Angel from your discard as +2 Light manually.</p>
+</article><article class="card">
+<header><h3>Mary, Mother of the Church</h3><p>Ally · Saint / Angel / Church</p></header>
+<div class="stats"><span><b>4</b><small>Cost</small></span><span><b>2</b><small>Light</small></span><span><b>0</b><small>Fervor</small></span></div>
+<p>Once per game, convert Desolation into Consolation.</p>
+</article><article class="card">
+<header><h3>Prayer</h3><p>Weapon of Light · Spiritual Practice</p></header>
+<div class="stats"><span><b>1</b><small>Cost</small></span><span><b>2</b><small>Light</small></span><span><b>0</b><small>Fervor</small></span></div>
+<p>If played before a Gift, add +1 Fervor manually.</p>
+</article><article class="card">
+<header><h3>Fasting</h3><p>Weapon of Light · Spiritual Practice</p></header>
+<div class="stats"><span><b>1</b><small>Cost</small></span><span><b>1</b><small>Light</small></span><span><b>1</b><small>Fervor</small></span></div>
+<p>Cancel Flesh or Gluttony. You may play one fewer card to gain +1 Fervor.</p>
+</article><article class="card">
+<header><h3>Abstinence</h3><p>Weapon of Light · Spiritual Practice</p></header>
+<div class="stats"><span><b>1</b><small>Cost</small></span><span><b>2</b><small>Light</small></span><span><b>0</b><small>Fervor</small></span></div>
+<p>Cancel Lust or Gluttony. Otherwise, prepare +2 Light for the next round.</p>
+</article><article class="card">
+<header><h3>Examen</h3><p>Weapon of Light · Spiritual Practice</p></header>
+<div class="stats"><span><b>1</b><small>Cost</small></span><span><b>1</b><small>Light</small></span><span><b>0</b><small>Fervor</small></span></div>
+<p>Reveal a lie. If you fail, count it as Failure with Examen.</p>
+</article><article class="card">
+<header><h3>Word</h3><p>Weapon of Light · Spiritual Practice</p></header>
+<div class="stats"><span><b>1</b><small>Cost</small></span><span><b>2</b><small>Light</small></span><span><b>0</b><small>Fervor</small></span></div>
+<p>Return a Virtue from your discard to your hand.</p>
+</article><article class="card">
+<header><h3>Almsgiving</h3><p>Weapon of Light · Spiritual Practice</p></header>
+<div class="stats"><span><b>1</b><small>Cost</small></span><span><b>3</b><small>Light</small></span><span><b>0</b><small>Fervor</small></span></div>
+<p>Spend 1 Fruit to gain +1 Communion against Greed or Envy.</p>
+</article></main><main class="sheet"><article class="card">
+<header><h3>Silence</h3><p>Weapon of Light · Spiritual Practice</p></header>
+<div class="stats"><span><b>1</b><small>Cost</small></span><span><b>1</b><small>Light</small></span><span><b>0</b><small>Fervor</small></span></div>
+<p>Cancel World or reduce Desolation by 1.</p>
+</article><article class="card">
+<header><h3>Watchfulness</h3><p>Weapon of Light · Spiritual Practice</p></header>
+<div class="stats"><span><b>1</b><small>Cost</small></span><span><b>1</b><small>Light</small></span><span><b>0</b><small>Fervor</small></span></div>
+<p>Look at the next 2 Dark Banner cards.</p>
+</article><article class="card">
+<header><h3>Perseverance</h3><p>Weapon of Light · Spiritual Practice</p></header>
+<div class="stats"><span><b>1</b><small>Cost</small></span><span><b>3</b><small>Light</small></span><span><b>0</b><small>Fervor</small></span></div>
+<p>If you failed the previous round, gain +3 Light and you may play one extra card.</p>
+</article><article class="card">
+<header><h3>You are corrected in front of others</h3><p>Life Trial · Quest</p></header>
+<div class="stats"><span><b>—</b><small>Cost</small></span><span><b>—</b><small>Light</small></span><span><b>—</b><small>Fervor</small></span></div>
+<p>Sin: Pride / Wrath. Darkness 8. Shortcut: Answer with irony: +5 Light, +1 Attachment. Clean victory: +1 Communion, +3 Fruits.</p>
+</article><article class="card">
+<header><h3>Someone receives the recognition you wanted</h3><p>Life Trial · Quest</p></header>
+<div class="stats"><span><b>—</b><small>Cost</small></span><span><b>—</b><small>Light</small></span><span><b>—</b><small>Fervor</small></span></div>
+<p>Sin: Envy. Darkness 7. Shortcut: Minimize it: draw 1 and gain +3 Light, add Envy. Clean victory: +1 Communion, +3 Fruits.</p>
+</article><article class="card">
+<header><h3>You have extra money and someone needs help</h3><p>Life Trial · Quest</p></header>
+<div class="stats"><span><b>—</b><small>Cost</small></span><span><b>—</b><small>Light</small></span><span><b>—</b><small>Fervor</small></span></div>
+<p>Sin: Greed. Darkness 6. Shortcut: Keep it for security: +1 Fruit, +1 Attachment. Clean victory: +1 Communion, +3 Fruits.</p>
+</article><article class="card">
+<header><h3>You are tired and it is time to pray</h3><p>Life Trial · Quest</p></header>
+<div class="stats"><span><b>—</b><small>Cost</small></span><span><b>—</b><small>Light</small></span><span><b>—</b><small>Fervor</small></span></div>
+<p>Sin: Sloth. Darkness 5. Shortcut: Leave it for tomorrow: +1 Desolation. Clean victory: +1 Communion, +3 Fruits.</p>
+</article><article class="card">
+<header><h3>You receive a humiliation</h3><p>Life Trial · Quest</p></header>
+<div class="stats"><span><b>—</b><small>Cost</small></span><span><b>—</b><small>Light</small></span><span><b>—</b><small>Fervor</small></span></div>
+<p>Sin: Pride / Wrath. Darkness 9. Shortcut: Justify yourself aggressively: +5 Light, +1 Attachment. Clean victory: +1 Communion, +3 Fruits.</p>
+</article><article class="card">
+<header><h3>An image or memory disorders your desire</h3><p>Life Trial · Quest</p></header>
+<div class="stats"><span><b>—</b><small>Cost</small></span><span><b>—</b><small>Light</small></span><span><b>—</b><small>Fervor</small></span></div>
+<p>Sin: Lust. Darkness 8. Shortcut: Dwell on it: draw 2, +1 Attachment. Clean victory: +1 Communion, +3 Fruits.</p>
+</article></main><main class="sheet"><article class="card">
+<header><h3>You eat, buy, or scroll too much to avoid emptiness</h3><p>Life Trial · Quest</p></header>
+<div class="stats"><span><b>—</b><small>Cost</small></span><span><b>—</b><small>Light</small></span><span><b>—</b><small>Fervor</small></span></div>
+<p>Sin: Gluttony. Darkness 7. Shortcut: Anesthetize yourself: heal 1 Desolation, +1 Attachment. Clean victory: +1 Communion, +3 Fruits.</p>
+</article><article class="card">
+<header><h3>Choose between looking good and telling the truth</h3><p>Life Trial · Quest</p></header>
+<div class="stats"><span><b>—</b><small>Cost</small></span><span><b>—</b><small>Light</small></span><span><b>—</b><small>Fervor</small></span></div>
+<p>Sin: World / Pride. Darkness 10. Shortcut: Look good: complete the Trial without Communion and add World. Clean victory: +1 Communion, +3 Fruits.</p>
+</article><article class="card">
+<header><h3>You must ask for forgiveness first</h3><p>Life Trial · Quest</p></header>
+<div class="stats"><span><b>—</b><small>Cost</small></span><span><b>—</b><small>Light</small></span><span><b>—</b><small>Fervor</small></span></div>
+<p>Sin: Pride. Darkness 7. Shortcut: Wait for the other to yield: +4 Light, +1 Attachment. Clean victory: +1 Communion, +3 Fruits.</p>
+</article><article class="card">
+<header><h3>A small task feels heavy</h3><p>Life Trial · Quest</p></header>
+<div class="stats"><span><b>—</b><small>Cost</small></span><span><b>—</b><small>Light</small></span><span><b>—</b><small>Fervor</small></span></div>
+<p>Sin: Sloth. Darkness 5. Shortcut: Postpone it: draw 1, +1 Desolation. Clean victory: +1 Communion, +3 Fruits.</p>
+</article><article class="card">
+<header><h3>You are provoked in conversation</h3><p>Life Trial · Quest</p></header>
+<div class="stats"><span><b>—</b><small>Cost</small></span><span><b>—</b><small>Light</small></span><span><b>—</b><small>Fervor</small></span></div>
+<p>Sin: Wrath. Darkness 8. Shortcut: Answer harshly: +5 Light, add Wrath. Clean victory: +1 Communion, +3 Fruits.</p>
+</article><article class="card">
+<header><h3>You see someone fall and can judge them</h3><p>Life Trial · Quest</p></header>
+<div class="stats"><span><b>—</b><small>Cost</small></span><span><b>—</b><small>Light</small></span><span><b>—</b><small>Fervor</small></span></div>
+<p>Sin: Pride / Envy. Darkness 7. Shortcut: Feel superior: +3 Light, +1 Attachment. Clean victory: +1 Communion, +3 Fruits.</p>
+</article><article class="card">
+<header><h3>You can serve without being seen</h3><p>Life Trial · Quest</p></header>
+<div class="stats"><span><b>—</b><small>Cost</small></span><span><b>—</b><small>Light</small></span><span><b>—</b><small>Fervor</small></span></div>
+<p>Sin: World / Sloth. Darkness 6. Shortcut: Avoid it because nobody will see: +1 Fruit, +1 Desolation. Clean victory: +1 Communion, +3 Fruits.</p>
+</article><article class="card">
+<header><h3>Noise prevents you from listening</h3><p>Life Trial · Quest</p></header>
+<div class="stats"><span><b>—</b><small>Cost</small></span><span><b>—</b><small>Light</small></span><span><b>—</b><small>Fervor</small></span></div>
+<p>Sin: World. Darkness 5. Shortcut: Distract yourself: draw 2, discard 1. Clean victory: +1 Communion, +3 Fruits.</p>
+</article><article class="card">
+<header><h3>You must discern an important decision</h3><p>Life Trial · Quest</p></header>
+<div class="stats"><span><b>—</b><small>Cost</small></span><span><b>—</b><small>Light</small></span><span><b>—</b><small>Fervor</small></span></div>
+<p>Sin: Devil / Confusion. Darkness 11. Shortcut: Choose what is comfortable: +4 Light, +1 Attachment. Clean victory: +1 Communion, +3 Fruits.</p>
+</article></main><main class="sheet"><article class="card">
+<header><h3>An old wound is triggered</h3><p>Life Trial · Quest</p></header>
+<div class="stats"><span><b>—</b><small>Cost</small></span><span><b>—</b><small>Light</small></span><span><b>—</b><small>Fervor</small></span></div>
+<p>Sin: Wrath / Desolation. Darkness 9. Shortcut: Close yourself off: avoid consequence, +1 Desolation. Clean victory: +1 Communion, +3 Fruits.</p>
+</article><article class="card">
+<header><h3>You can manipulate a small truth</h3><p>Life Trial · Quest</p></header>
+<div class="stats"><span><b>—</b><small>Cost</small></span><span><b>—</b><small>Light</small></span><span><b>—</b><small>Fervor</small></span></div>
+<p>Sin: Devil / Pride. Darkness 8. Shortcut: Useful half-truth: +5 Light, add Devil. Clean victory: +1 Communion, +3 Fruits.</p>
+</article><article class="card">
+<header><h3>The body asks for immediate comfort</h3><p>Life Trial · Quest</p></header>
+<div class="stats"><span><b>—</b><small>Cost</small></span><span><b>—</b><small>Light</small></span><span><b>—</b><small>Fervor</small></span></div>
+<p>Sin: Flesh / Gluttony. Darkness 6. Shortcut: Yield without measure: +3 Light, +1 Attachment. Clean victory: +1 Communion, +3 Fruits.</p>
+</article><article class="card">
+<header><h3>You feel dryness in prayer</h3><p>Life Trial · Quest</p></header>
+<div class="stats"><span><b>—</b><small>Cost</small></span><span><b>—</b><small>Light</small></span><span><b>—</b><small>Fervor</small></span></div>
+<p>Sin: Desolation / Sloth. Darkness 7. Shortcut: Abandon it: draw 1, +1 Desolation. Clean victory: +1 Communion, +3 Fruits.</p>
+</article><article class="card">
+<header><h3>You must rejoice for another person</h3><p>Life Trial · Quest</p></header>
+<div class="stats"><span><b>—</b><small>Cost</small></span><span><b>—</b><small>Light</small></span><span><b>—</b><small>Fervor</small></span></div>
+<p>Sin: Envy. Darkness 6. Shortcut: Congratulate externally, resent internally: +4 Light, +1 Attachment. Clean victory: +1 Communion, +3 Fruits.</p>
+</article><article class="card">
+<header><h3>You are offered unjust gain</h3><p>Life Trial · Quest</p></header>
+<div class="stats"><span><b>—</b><small>Cost</small></span><span><b>—</b><small>Light</small></span><span><b>—</b><small>Fervor</small></span></div>
+<p>Sin: Greed / Devil. Darkness 10. Shortcut: Take advantage: +2 Fruits, +2 Attachment. Clean victory: +1 Communion, +3 Fruits.</p>
+</article><article class="card">
+<header><h3>The community needs you</h3><p>Life Trial · Quest</p></header>
+<div class="stats"><span><b>—</b><small>Cost</small></span><span><b>—</b><small>Light</small></span><span><b>—</b><small>Fervor</small></span></div>
+<p>Sin: Sloth / World. Darkness 8. Shortcut: Hide: avoid spending cards, +1 Desolation. Clean victory: +1 Communion, +3 Fruits.</p>
+</article><article class="card">
+<header><h3>You compare yourself with your ideal life</h3><p>Life Trial · Quest</p></header>
+<div class="stats"><span><b>—</b><small>Cost</small></span><span><b>—</b><small>Light</small></span><span><b>—</b><small>Fervor</small></span></div>
+<p>Sin: World / Envy. Darkness 7. Shortcut: Fantasize and despise the present: draw 2, +1 Attachment. Clean victory: +1 Communion, +3 Fruits.</p>
+</article><article class="card">
+<header><h3>Final Choice: under which banner will you live?</h3><p>Life Trial · Quest</p></header>
+<div class="stats"><span><b>—</b><small>Cost</small></span><span><b>—</b><small>Light</small></span><span><b>—</b><small>Fervor</small></span></div>
+<p>Sin: Final. Darkness 10. Shortcut: Add +2 Darkness for each Attachment above 5. Clean victory: +1 Communion, +3 Fruits.</p>
+</article></main>
+</body>
+</html>
