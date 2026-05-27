@@ -1,9 +1,11 @@
 import type { Card } from '../types/cards';
 import { getCardCost } from '../game/rules';
+import { localizeText } from '../i18n/cards';
+import type { Language } from '../i18n/cards';
 
 interface CardViewProps {
   card: Card;
-  lang?: 'en' | 'es';
+  lang?: Language;
   compact?: boolean;
   actionLabel?: string;
   buyLabel?: string;
@@ -16,8 +18,13 @@ interface CardViewProps {
   onAction?: () => void;
 }
 
-export function CardView({ card, lang = 'en', compact = false, actionLabel, buyLabel = 'Buy', labels, disabled, onAction }: CardViewProps) {
-  const statLabels = labels ?? { cost: 'Cost', light: 'Light', fervor: 'Fervor' };
+export function CardView({ card, lang = 'en', compact = false, actionLabel, buyLabel, labels, disabled, onAction }: CardViewProps) {
+  const statLabels = labels ?? {
+    cost: lang === 'es' ? 'Coste' : 'Cost',
+    light: lang === 'es' ? 'Luz' : 'Light',
+    fervor: 'Fervor',
+  };
+  const resolvedBuyLabel = buyLabel ?? (lang === 'es' ? 'Comprar' : 'Buy');
   return (
     <article className={`card-view ${classNameForType(card.type)} ${compact ? 'compact' : ''}`}>
       <header>
@@ -33,28 +40,15 @@ export function CardView({ card, lang = 'en', compact = false, actionLabel, buyL
       {card.tags.length > 0 && <p className="card-tags">{card.tags.join(' · ')}</p>}
       {actionLabel && (
         <button type="button" disabled={disabled} onClick={onAction}>
-          {actionLabel}{actionLabel === buyLabel ? ` (${getCardCost(card)})` : ''}
+          {actionLabel}{actionLabel === resolvedBuyLabel ? ` (${getCardCost(card)})` : ''}
         </button>
       )}
     </article>
   );
 }
 
-function translateType(type: Card['type'], lang: 'en' | 'es'): string {
-  if (lang === 'en') return type;
-  const map: Record<Card['type'], string> = {
-    Starter: 'Inicial',
-    'Capital Sin': 'Pecado Capital',
-    Virtue: 'Virtud',
-    'Gift of the Holy Spirit': 'Don del Espíritu Santo',
-    Sacrament: 'Sacramento',
-    'Dark Banner': 'Bandera Oscura',
-    Mystery: 'Misterio',
-    Ally: 'Aliado',
-    'Weapon of Light': 'Arma de Luz',
-    'Life Trial': 'Prueba de Vida',
-  };
-  return map[type];
+function translateType(type: Card['type'], lang: Language): string {
+  return localizeText(type, lang);
 }
 
 function classNameForType(type: Card['type']): string {

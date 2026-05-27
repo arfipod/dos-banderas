@@ -1,4 +1,4 @@
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import type { ChangeEvent } from 'react';
 import { cards } from './data/cards';
 import type { Card, RuntimeCard } from './types/cards';
@@ -16,11 +16,189 @@ import {
 import { downloadJson, timestampForFilename } from './utils/download';
 import { CardView } from './components/CardView';
 import { RulesReference } from './components/RulesReference';
-import { localizeCard } from './i18n/cards';
+import { localizeCard, localizeText } from './i18n/cards';
+import type { Language } from './i18n/cards';
 import './styles.css';
 
 type Tab = 'simulator' | 'cards' | 'print' | 'rules';
-type Language = 'en' | 'es';
+
+const UI = {
+  en: {
+    tagline: 'Spiritual combat card game prototype · React + TypeScript + Vite',
+    nav: { simulator: 'Simulator', cards: 'Cards', print: 'Print', rules: 'Rules' },
+    setup: 'Game Setup',
+    mode: 'Mode',
+    modes: { solo: 'Solo', coop: 'Local cooperative' },
+    difficulty: 'Difficulty',
+    difficulties: { easy: 'Contemplative', normal: 'Normal', hard: 'Intense combat' },
+    startGame: 'Start Game',
+    reset: 'Reset',
+    downloadLog: 'Download Playtest Log',
+    downloadState: 'Download State',
+    downloadRules: 'Download Rules',
+    importRules: 'Import Rules',
+    meters: 'Meters',
+    meterNames: {
+      communion: 'Communion',
+      attachment: 'Attachment',
+      desolation: 'Desolation',
+      consolation: 'Consolation',
+      fruits: 'Fruits',
+    },
+    phase: 'Phase',
+    round: 'Round',
+    active: 'Active',
+    currentTrial: 'Current Trial',
+    darkBanner: 'Dark Banner',
+    revealTrialPrompt: 'Reveal a Trial to begin the round.',
+    noDarkBanner: 'No Dark Banner card revealed.',
+    resolution: 'Resolution',
+    light: 'Light',
+    result: 'Result',
+    darkness: 'Darkness',
+    cost: 'Cost',
+    revealTrial: 'Reveal Trial',
+    christBanner: "Christ's Banner",
+    acceptShortcut: 'Accept Shortcut',
+    resolve: 'Resolve',
+    endShop: 'End Shop',
+    drawOne: 'Draw 1',
+    next: 'Next',
+    undoPlayed: 'Undo Played',
+    hand: 'Hand',
+    deck: 'Deck',
+    discard: 'Discard',
+    played: 'Played',
+    noCardsInHand: 'No cards in hand.',
+    play: 'Play',
+    playedCards: 'Played Cards',
+    noPlayedCards: 'No cards played yet.',
+    churchRow: 'Church Row',
+    churchRowHint: 'Buy during the shop phase. Current Fruits',
+    buy: 'Buy',
+    playtestLog: 'Playtest Log',
+    cardLibrary: 'Card Library',
+    cardLibraryHint: 'All 90 prototype cards are stored as typed data in',
+    printTitle: 'Print & Play Cards',
+    printHint: 'Use the browser print command. The print CSS lays the cards out as 63×88mm cards on A4 sheets.',
+    phases: {
+      setup: 'setup',
+      ready: 'ready',
+      'choose-banner': 'choose banner',
+      play: 'play',
+      shop: 'shop',
+      ended: 'ended',
+    },
+    logTypes: {
+      start: 'start',
+      warning: 'warning',
+      shuffle: 'shuffle',
+      draw: 'draw',
+      end: 'end',
+      reveal: 'reveal',
+      banner: 'banner',
+      play: 'play',
+      hint: 'hint',
+      undo: 'undo',
+      adjust: 'adjust',
+      meter: 'meter',
+      resolve: 'resolve',
+      buy: 'buy',
+      phase: 'phase',
+      rules: 'rules',
+    },
+  },
+  es: {
+    tagline: 'Prototipo de juego de cartas de combate espiritual · React + TypeScript + Vite',
+    nav: { simulator: 'Simulador', cards: 'Cartas', print: 'Imprimir', rules: 'Reglas' },
+    setup: 'Configuración',
+    mode: 'Modo',
+    modes: { solo: 'Solo', coop: 'Cooperativo local' },
+    difficulty: 'Dificultad',
+    difficulties: { easy: 'Contemplativo', normal: 'Normal', hard: 'Combate intenso' },
+    startGame: 'Iniciar partida',
+    reset: 'Reiniciar',
+    downloadLog: 'Descargar registro',
+    downloadState: 'Descargar estado',
+    downloadRules: 'Descargar reglas',
+    importRules: 'Importar reglas',
+    meters: 'Medidores',
+    meterNames: {
+      communion: 'Comunión',
+      attachment: 'Apego',
+      desolation: 'Desolación',
+      consolation: 'Consolación',
+      fruits: 'Frutos',
+    },
+    phase: 'Fase',
+    round: 'Ronda',
+    active: 'Activo',
+    currentTrial: 'Prueba actual',
+    darkBanner: 'Bandera oscura',
+    revealTrialPrompt: 'Revela una Prueba para comenzar la ronda.',
+    noDarkBanner: 'No se reveló carta de Bandera Oscura.',
+    resolution: 'Resolución',
+    light: 'Luz',
+    result: 'Resultado',
+    darkness: 'Oscuridad',
+    cost: 'Coste',
+    revealTrial: 'Revelar prueba',
+    christBanner: 'Bandera de Cristo',
+    acceptShortcut: 'Aceptar atajo',
+    resolve: 'Resolver',
+    endShop: 'Terminar compra',
+    drawOne: 'Robar 1',
+    next: 'Siguiente',
+    undoPlayed: 'Deshacer jugada',
+    hand: 'Mano',
+    deck: 'Mazo',
+    discard: 'Descartes',
+    played: 'Jugadas',
+    noCardsInHand: 'No hay cartas en mano.',
+    play: 'Jugar',
+    playedCards: 'Cartas jugadas',
+    noPlayedCards: 'Aún no hay cartas jugadas.',
+    churchRow: 'Fila de Iglesia',
+    churchRowHint: 'Compra durante la fase de tienda. Frutos actuales',
+    buy: 'Comprar',
+    playtestLog: 'Registro de pruebas',
+    cardLibrary: 'Biblioteca de cartas',
+    cardLibraryHint: 'Las 90 cartas prototipo están en datos tipados en',
+    printTitle: 'Cartas para imprimir y jugar',
+    printHint: 'Usa el comando de impresión del navegador. El CSS de impresión organiza cartas de 63×88mm en hojas A4.',
+    phases: {
+      setup: 'configuración',
+      ready: 'lista',
+      'choose-banner': 'elegir bandera',
+      play: 'jugar',
+      shop: 'tienda',
+      ended: 'terminada',
+    },
+    logTypes: {
+      start: 'inicio',
+      warning: 'aviso',
+      shuffle: 'barajar',
+      draw: 'robo',
+      end: 'fin',
+      reveal: 'revelar',
+      banner: 'bandera',
+      play: 'jugar',
+      hint: 'pista',
+      undo: 'deshacer',
+      adjust: 'ajuste',
+      meter: 'medidor',
+      resolve: 'resolver',
+      buy: 'compra',
+      phase: 'fase',
+      rules: 'reglas',
+    },
+  },
+} as const;
+
+function localizeLogType(type: string, lang: Language): string {
+  const logTypes = UI[lang].logTypes as Record<string, string>;
+  return logTypes[type] ?? localizeText(type, lang);
+}
 
 function createPlayer(name: string): PlayerState {
   const starterCards = STARTER_CARD_NAMES
@@ -128,6 +306,12 @@ export default function App() {
 
   const player = state.players.length > 0 ? activePlayer(state) : null;
   const score = useMemo(() => calculateScore(state), [state]);
+  const t = UI[lang];
+  const cardLabels = { cost: t.cost, light: t.light, fervor: 'Fervor' };
+
+  useEffect(() => {
+    document.documentElement.lang = lang;
+  }, [lang]);
 
   function commit(mutator: (draft: GameState, addLog: (type: string, message: string, payload?: unknown) => void) => void) {
     setState((previous) => {
@@ -428,13 +612,13 @@ export default function App() {
       <header className="app-header">
         <div>
           <h1>Dos Banderas</h1>
-          <p>{lang === 'es' ? 'Prototipo de juego de cartas de combate espiritual · React + TypeScript + Vite' : 'Spiritual combat card game prototype · React + TypeScript + Vite'}</p>
+          <p>{t.tagline}</p>
         </div>
         <nav>
-          <button className={tab === 'simulator' ? 'active' : ''} onClick={() => setTab('simulator')}>{lang === 'es' ? 'Simulador' : 'Simulator'}</button>
-          <button className={tab === 'cards' ? 'active' : ''} onClick={() => setTab('cards')}>{lang === 'es' ? 'Cartas' : 'Cards'}</button>
-          <button className={tab === 'print' ? 'active' : ''} onClick={() => setTab('print')}>{lang === 'es' ? 'Imprimir' : 'Print'}</button>
-          <button className={tab === 'rules' ? 'active' : ''} onClick={() => setTab('rules')}>{lang === 'es' ? 'Reglas' : 'Rules'}</button>
+          <button className={tab === 'simulator' ? 'active' : ''} onClick={() => setTab('simulator')}>{t.nav.simulator}</button>
+          <button className={tab === 'cards' ? 'active' : ''} onClick={() => setTab('cards')}>{t.nav.cards}</button>
+          <button className={tab === 'print' ? 'active' : ''} onClick={() => setTab('print')}>{t.nav.print}</button>
+          <button className={tab === 'rules' ? 'active' : ''} onClick={() => setTab('rules')}>{t.nav.rules}</button>
         
           <select value={lang} onChange={(event: ChangeEvent<HTMLSelectElement>) => setLang(event.target.value as Language)}>
             <option value="es">Español</option>
@@ -446,30 +630,30 @@ export default function App() {
       {tab === 'simulator' && (
         <main className="simulator-layout">
           <section className="panel setup-panel">
-            <h2>{lang === 'es' ? 'Configuración' : 'Game Setup'}</h2>
+            <h2>{t.setup}</h2>
             <div className="controls-row">
               <label>
-                {lang === 'es' ? 'Modo' : 'Mode'}
+                {t.mode}
                 <select value={mode} onChange={(event: ChangeEvent<HTMLSelectElement>) => setMode(event.target.value as GameMode)}>
-                  <option value="solo">Solo</option>
-                  <option value="coop">{lang === 'es' ? 'Cooperativo local' : 'Local cooperative'}</option>
+                  <option value="solo">{t.modes.solo}</option>
+                  <option value="coop">{t.modes.coop}</option>
                 </select>
               </label>
               <label>
-                {lang === 'es' ? 'Dificultad' : 'Difficulty'}
+                {t.difficulty}
                 <select value={difficulty} onChange={(event: ChangeEvent<HTMLSelectElement>) => setDifficulty(event.target.value as Difficulty)}>
-                  <option value="easy">{lang === 'es' ? 'Contemplativo' : 'Contemplative'}</option>
-                  <option value="normal">Normal</option>
-                  <option value="hard">{lang === 'es' ? 'Combate intenso' : 'Intense combat'}</option>
+                  <option value="easy">{t.difficulties.easy}</option>
+                  <option value="normal">{t.difficulties.normal}</option>
+                  <option value="hard">{t.difficulties.hard}</option>
                 </select>
               </label>
-              <button className="primary" onClick={startGame}>{lang === 'es' ? 'Iniciar partida' : 'Start Game'}</button>
-              <button onClick={resetToSetup}>{lang === 'es' ? 'Reiniciar' : 'Reset'}</button>
-              <button onClick={exportLog}>{lang === 'es' ? 'Descargar registro' : 'Download Playtest Log'}</button>
-              <button onClick={exportState}>{lang === 'es' ? 'Descargar estado' : 'Download State'}</button>
-              <button onClick={exportRules}>{lang === 'es' ? 'Descargar reglas' : 'Download Rules'}</button>
+              <button className="primary" onClick={startGame}>{t.startGame}</button>
+              <button onClick={resetToSetup}>{t.reset}</button>
+              <button onClick={exportLog}>{t.downloadLog}</button>
+              <button onClick={exportState}>{t.downloadState}</button>
+              <button onClick={exportRules}>{t.downloadRules}</button>
               <label>
-                {lang === 'es' ? 'Importar reglas' : 'Import Rules'}
+                {t.importRules}
                 <input type="file" accept="application/json" onChange={importRules} />
               </label>
             </div>
@@ -478,14 +662,14 @@ export default function App() {
           {state.phase !== 'setup' && player && (
             <>
               <section className="panel meters-panel">
-                <h2>{lang === 'es' ? 'Medidores' : 'Meters'}</h2>
+                <h2>{t.meters}</h2>
                 <div className="meters-grid">
                   {([
-                    ['communion', lang === 'es' ? 'Comunión' : 'Communion', state.communion],
-                    ['attachment', lang === 'es' ? 'Apego' : 'Attachment', state.attachment],
-                    ['desolation', lang === 'es' ? 'Desolación' : 'Desolation', state.desolation],
-                    ['consolation', lang === 'es' ? 'Consolación' : 'Consolation', state.consolation],
-                    ['fruits', lang === 'es' ? 'Frutos' : 'Fruits', state.fruits],
+                    ['communion', t.meterNames.communion, state.communion],
+                    ['attachment', t.meterNames.attachment, state.attachment],
+                    ['desolation', t.meterNames.desolation, state.desolation],
+                    ['consolation', t.meterNames.consolation, state.consolation],
+                    ['fruits', t.meterNames.fruits, state.fruits],
                   ] as const).map(([field, label, value]) => (
                     <div className="meter" key={field}>
                       <span>{label}</span>
@@ -497,60 +681,60 @@ export default function App() {
                     </div>
                   ))}
                 </div>
-                <p className="phase-line">{lang === 'es' ? 'Fase' : 'Phase'}: <strong>{state.phase}</strong> · {lang === 'es' ? 'Ronda' : 'Round'}: <strong>{state.round}/6</strong> · {lang === 'es' ? 'Activo' : 'Active'}: <strong>{player.name}</strong></p>
+                <p className="phase-line">{t.phase}: <strong>{t.phases[state.phase]}</strong> · {t.round}: <strong>{state.round}/6</strong> · {t.active}: <strong>{localizeText(player.name, lang)}</strong></p>
               </section>
 
               <section className="battle-grid">
                 <div className="panel">
-                  <h2>{lang === 'es' ? 'Prueba actual' : 'Current Trial'}</h2>
-                  {state.currentTrial ? <CardView card={localizeCard(state.currentTrial, lang)} lang={lang} labels={{ cost: lang === 'es' ? 'Coste' : 'Cost', light: lang === 'es' ? 'Luz' : 'Light', fervor: lang === 'es' ? 'Fervor' : 'Fervor' }} /> : <p className="empty">{lang === 'es' ? 'Revela una Prueba para comenzar la ronda.' : 'Reveal a Trial to begin the round.'}</p>}
+                  <h2>{t.currentTrial}</h2>
+                  {state.currentTrial ? <CardView card={localizeCard(state.currentTrial, lang)} lang={lang} labels={cardLabels} /> : <p className="empty">{t.revealTrialPrompt}</p>}
                 </div>
                 <div className="panel">
-                  <h2>{lang === 'es' ? 'Bandera oscura' : 'Dark Banner'}</h2>
-                  {state.currentDarkCard ? <CardView card={localizeCard(state.currentDarkCard, lang)} lang={lang} labels={{ cost: lang === 'es' ? 'Coste' : 'Cost', light: lang === 'es' ? 'Luz' : 'Light', fervor: lang === 'es' ? 'Fervor' : 'Fervor' }} /> : <p className="empty">{lang === 'es' ? 'No se reveló carta de Bandera Oscura.' : 'No Dark Banner card revealed.'}</p>}
+                  <h2>{t.darkBanner}</h2>
+                  {state.currentDarkCard ? <CardView card={localizeCard(state.currentDarkCard, lang)} lang={lang} labels={cardLabels} /> : <p className="empty">{t.noDarkBanner}</p>}
                 </div>
               </section>
 
               <section className="panel score-panel">
-                <h2>{lang === 'es' ? 'Resolución' : 'Resolution'}</h2>
+                <h2>{t.resolution}</h2>
                 <div className="score-grid">
-                  <div><strong>{score.light}</strong><span>{lang === 'es' ? 'Luz' : 'Light'}</span></div>
+                  <div><strong>{score.light}</strong><span>{t.light}</span></div>
                   <div><strong>×{score.fervor}</strong><span>Fervor</span></div>
-                  <div><strong>{score.result}</strong><span>{lang === 'es' ? 'Resultado' : 'Result'}</span></div>
-                  <div><strong>{score.darkness}</strong><span>{lang === 'es' ? 'Oscuridad' : 'Darkness'}</span></div>
+                  <div><strong>{score.result}</strong><span>{t.result}</span></div>
+                  <div><strong>{score.darkness}</strong><span>{t.darkness}</span></div>
                 </div>
                 <div className="controls-row">
-                  <button className="primary" onClick={revealRound} disabled={state.phase !== 'ready'}>{lang === 'es' ? 'Revelar prueba' : 'Reveal Trial'}</button>
-                  <button className="good" onClick={() => chooseBanner('christ')} disabled={!state.currentTrial}>{lang === 'es' ? 'Bandera de Cristo' : "Christ's Banner"}</button>
-                  <button className="danger" onClick={() => chooseBanner('shortcut')} disabled={!state.currentTrial}>{lang === 'es' ? 'Aceptar atajo' : 'Accept Shortcut'}</button>
-                  <button className="primary" onClick={resolveRound} disabled={state.phase !== 'play'}>{lang === 'es' ? 'Resolver' : 'Resolve'}</button>
-                  <button onClick={endShop} disabled={state.phase !== 'shop'}>{lang === 'es' ? 'Terminar compra' : 'End Shop'}</button>
-                  <button onClick={drawManual}>{lang === 'es' ? 'Robar 1' : 'Draw 1'}</button>
-                  <button onClick={nextAction}>{lang === 'es' ? 'Siguiente' : 'Next'}</button>
+                  <button className="primary" onClick={revealRound} disabled={state.phase !== 'ready'}>{t.revealTrial}</button>
+                  <button className="good" onClick={() => chooseBanner('christ')} disabled={!state.currentTrial}>{t.christBanner}</button>
+                  <button className="danger" onClick={() => chooseBanner('shortcut')} disabled={!state.currentTrial}>{t.acceptShortcut}</button>
+                  <button className="primary" onClick={resolveRound} disabled={state.phase !== 'play'}>{t.resolve}</button>
+                  <button onClick={endShop} disabled={state.phase !== 'shop'}>{t.endShop}</button>
+                  <button onClick={drawManual}>{t.drawOne}</button>
+                  <button onClick={nextAction}>{t.next}</button>
                 </div>
                 <div className="controls-row">
-                  <button onClick={() => adjust('bonusLight', +1)}>+1 {lang === 'es' ? 'Luz' : 'Light'}</button>
-                  <button onClick={() => adjust('bonusLight', -1)}>-1 {lang === 'es' ? 'Luz' : 'Light'}</button>
+                  <button onClick={() => adjust('bonusLight', +1)}>+1 {t.light}</button>
+                  <button onClick={() => adjust('bonusLight', -1)}>-1 {t.light}</button>
                   <button onClick={() => adjust('bonusFervor', +1)}>+1 Fervor</button>
                   <button onClick={() => adjust('bonusFervor', -1)}>-1 Fervor</button>
-                  <button onClick={() => adjust('darknessModifier', +1)}>+1 {lang === 'es' ? 'Oscuridad' : 'Darkness'}</button>
-                  <button onClick={() => adjust('darknessModifier', -1)}>-1 {lang === 'es' ? 'Oscuridad' : 'Darkness'}</button>
-                  <button onClick={undoLastPlayed}>{lang === 'es' ? 'Deshacer jugada' : 'Undo Played'}</button>
+                  <button onClick={() => adjust('darknessModifier', +1)}>+1 {t.darkness}</button>
+                  <button onClick={() => adjust('darknessModifier', -1)}>-1 {t.darkness}</button>
+                  <button onClick={undoLastPlayed}>{t.undoPlayed}</button>
                 </div>
               </section>
 
               <section className="panel">
-                <h2>{lang === 'es' ? 'Mano' : 'Hand'} · {player.name}</h2>
-                <p className="hint">{lang === 'es' ? 'Mazo' : 'Deck'} {player.deck.length} · {lang === 'es' ? 'Descartes' : 'Discard'} {player.discard.length} · {lang === 'es' ? 'Jugadas' : 'Played'} {player.played.length}/{state.rules.maxPlayedCards}</p>
+                <h2>{t.hand} · {localizeText(player.name, lang)}</h2>
+                <p className="hint">{t.deck} {player.deck.length} · {t.discard} {player.discard.length} · {t.played} {player.played.length}/{state.rules.maxPlayedCards}</p>
                 <div className="card-grid">
-                  {player.hand.length === 0 && <p className="empty">{lang === 'es' ? 'No hay cartas en mano.' : 'No cards in hand.'}</p>}
+                  {player.hand.length === 0 && <p className="empty">{t.noCardsInHand}</p>}
                   {player.hand.map((card) => (
                     <CardView
                       key={card.uid}
                       card={localizeCard(card, lang)}
                       lang={lang}
                       compact
-                      actionLabel={lang === 'es' ? 'Jugar' : 'Play'}
+                      actionLabel={t.play}
                       disabled={state.phase !== 'play'}
                       onAction={() => playCard(card.uid)}
                     />
@@ -559,16 +743,16 @@ export default function App() {
               </section>
 
               <section className="panel">
-                <h2>{lang === 'es' ? 'Cartas jugadas' : 'Played Cards'}</h2>
+                <h2>{t.playedCards}</h2>
                 <div className="card-grid">
-                  {player.played.length === 0 && <p className="empty">{lang === 'es' ? 'Aún no hay cartas jugadas.' : 'No cards played yet.'}</p>}
-                  {player.played.map((card) => <CardView key={card.uid} card={localizeCard(card, lang)} lang={lang} compact labels={{ cost: lang === 'es' ? 'Coste' : 'Cost', light: lang === 'es' ? 'Luz' : 'Light', fervor: lang === 'es' ? 'Fervor' : 'Fervor' }} />)}
+                  {player.played.length === 0 && <p className="empty">{t.noPlayedCards}</p>}
+                  {player.played.map((card) => <CardView key={card.uid} card={localizeCard(card, lang)} lang={lang} compact labels={cardLabels} />)}
                 </div>
               </section>
 
               <section className="panel">
-                <h2>{lang === 'es' ? 'Fila de Iglesia' : 'Church Row'}</h2>
-                <p className="hint">{lang === 'es' ? 'Compra durante la fase de tienda. Frutos actuales' : 'Buy during the shop phase. Current Fruits'}: {state.fruits}</p>
+                <h2>{t.churchRow}</h2>
+                <p className="hint">{t.churchRowHint}: {state.fruits}</p>
                 <div className="card-grid">
                   {state.churchRow.map((card) => (
                     <CardView
@@ -576,9 +760,9 @@ export default function App() {
                       card={localizeCard(card, lang)}
                       lang={lang}
                       compact
-                      actionLabel={lang === 'es' ? 'Comprar' : 'Buy'}
-                      buyLabel={lang === 'es' ? 'Comprar' : 'Buy'}
-                      labels={{ cost: lang === 'es' ? 'Coste' : 'Cost', light: lang === 'es' ? 'Luz' : 'Light', fervor: lang === 'es' ? 'Fervor' : 'Fervor' }}
+                      actionLabel={t.buy}
+                      buyLabel={t.buy}
+                      labels={cardLabels}
                       disabled={state.phase !== 'shop' || state.fruits < getCardCost(card)}
                       onAction={() => buyCard(card.uid)}
                     />
@@ -587,11 +771,11 @@ export default function App() {
               </section>
 
               <section className="panel">
-                <h2>{lang === 'es' ? 'Registro de pruebas' : 'Playtest Log'}</h2>
+                <h2>{t.playtestLog}</h2>
                 <div className="log-list">
                   {[...state.playtestLog].reverse().map((event, index) => (
                     <p key={`${event.timestamp}-${index}`}>
-                      <time>{event.timestamp.slice(11, 19)}</time> <strong>{event.type}</strong>: {event.message}
+                      <time>{event.timestamp.slice(11, 19)}</time> <strong>{localizeLogType(event.type, lang)}</strong>: {localizeText(event.message, lang)}
                     </p>
                   ))}
                 </div>
@@ -603,20 +787,20 @@ export default function App() {
 
       {tab === 'cards' && (
         <main className="panel">
-          <h2>{lang === 'es' ? 'Biblioteca de cartas' : 'Card Library'}</h2>
-          <p className="hint">{lang === 'es' ? 'Las 90 cartas prototipo están en datos tipados en' : 'All 90 prototype cards are stored as typed data in'} <code>src/data/cards.ts</code>.</p>
+          <h2>{t.cardLibrary}</h2>
+          <p className="hint">{t.cardLibraryHint} <code>src/data/cards.ts</code>.</p>
           <div className="card-grid library">
-            {cards.map((card) => <CardView key={card.id} card={localizeCard(card, lang)} lang={lang} compact labels={{ cost: lang === 'es' ? 'Coste' : 'Cost', light: lang === 'es' ? 'Luz' : 'Light', fervor: lang === 'es' ? 'Fervor' : 'Fervor' }} />)}
+            {cards.map((card) => <CardView key={card.id} card={localizeCard(card, lang)} lang={lang} compact labels={cardLabels} />)}
           </div>
         </main>
       )}
 
       {tab === 'print' && (
         <main className="print-page">
-          <h2 className="screen-only">{lang === 'es' ? 'Cartas para imprimir y jugar' : 'Print & Play Cards'}</h2>
-          <p className="screen-only">{lang === 'es' ? 'Usa el comando de impresión del navegador. El CSS de impresión organiza cartas de 63×88mm en hojas A4.' : 'Use the browser print command. The print CSS lays the cards out as 63×88mm cards on A4 sheets.'}</p>
+          <h2 className="screen-only">{t.printTitle}</h2>
+          <p className="screen-only">{t.printHint}</p>
           <div className="print-grid">
-            {cards.map((card) => <CardView key={card.id} card={localizeCard(card, lang)} lang={lang} compact labels={{ cost: lang === 'es' ? 'Coste' : 'Cost', light: lang === 'es' ? 'Luz' : 'Light', fervor: lang === 'es' ? 'Fervor' : 'Fervor' }} />)}
+            {cards.map((card) => <CardView key={card.id} card={localizeCard(card, lang)} lang={lang} compact labels={cardLabels} />)}
           </div>
         </main>
       )}

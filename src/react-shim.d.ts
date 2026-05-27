@@ -1,5 +1,6 @@
 declare module 'react' {
   export type ChangeEvent<T = Element> = { target: T };
+  export function useEffect(effect: () => void | (() => void), deps?: unknown[]): void;
   export function useMemo<T>(factory: () => T, deps: unknown[]): T;
   export function useState<T>(initialState: T | (() => T)): [T, (value: T | ((prev: T) => T)) => void];
   export const StrictMode: (props: { children?: unknown }) => unknown;
