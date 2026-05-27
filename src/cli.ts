@@ -1,10 +1,13 @@
 /// <reference types="node" />
 import { availableParallelism } from 'node:os';
+import { readFileSync } from 'node:fs';
 import { Worker, isMainThread, parentPort, workerData } from 'node:worker_threads';
-import type { Difficulty, GameMode, GameState } from './game/state';
+import type { Difficulty, GameMode, GameState, RuleConfig } from './game/state';
+import { DEFAULT_RULES } from './game/state';
 import { runAutomatedGame } from './game/engine';
 
 type MetricName = 'communion' | 'attachment' | 'desolation' | 'consolation' | 'fruits' | 'rounds';
+type OutcomeName = 'cleanVictory' | 'mixedVictory' | 'failedWithExamen' | 'failedClosed';
 type WorkerMessage =
   | { type: 'progress'; completed: number }
   | { type: 'done'; summary: SimulationSummary };
@@ -17,6 +20,7 @@ interface CliOptions {
   batchSize: number;
   progress: boolean;
   pretty: boolean;
+  rules: RuleConfig;
 }
 
 interface MetricAccumulator {
@@ -35,6 +39,10 @@ interface SimulationSummary {
   dispersions: number;
   lowCommunionEndings: number;
   highDesolationEndings: number;
+  finalChoiceSuccesses: number;
+  christBannerChoices: number;
+  shortcutChoices: number;
+  outcomes: Record<OutcomeName, number>;
   metrics: Record<MetricName, MetricAccumulator>;
 }
 
@@ -53,21 +61,30 @@ interface FinalReport {
     dispersion: number;
     lowCommunionEnding: number;
     highDesolationEnding: number;
+    finalChoiceSuccess: number;
+    christBannerChoice: number;
+    shortcutChoice: number;
+  };
+  outcomes: {
+    counts: Record<OutcomeName, number>;
+    rates: Record<OutcomeName, number>;
   };
   averages: Record<MetricName, number>;
   stdev: Record<MetricName, number>;
   percentiles: Record<MetricName, { p10: number; p25: number; p50: number; p75: number; p90: number }>;
   ranges: Record<MetricName, { min: number; max: number }>;
   distributions: Record<MetricName, Record<string, number>>;
+  rules: RuleConfig;
 }
 
 const METRICS: MetricName[] = ['communion', 'attachment', 'desolation', 'consolation', 'fruits', 'rounds'];
+const OUTCOMES: OutcomeName[] = ['cleanVictory', 'mixedVictory', 'failedWithExamen', 'failedClosed'];
 const VALID_MODES: GameMode[] = ['solo', 'coop'];
 const VALID_DIFFICULTIES: Difficulty[] = ['easy', 'normal', 'hard'];
 
 if (!isMainThread) {
   const options = workerData as CliOptions;
-  const summary = runSimulations(options.games, options.mode, options.difficulty, options.batchSize, (completed) => {
+  const summary = runSimulations(options.games, options.mode, options.difficulty, options.batchSize, options.rules, (completed) => {
     parentPort?.postMessage({ type: 'progress', completed } satisfies WorkerMessage);
   });
   parentPort?.postMessage({ type: 'done', summary } satisfies WorkerMessage);
@@ -90,7 +107,7 @@ async function main(): Promise<void> {
 function runSequential(options: CliOptions): SimulationSummary {
   let completed = 0;
   const progress = createProgressReporter(options);
-  return runSimulations(options.games, options.mode, options.difficulty, options.batchSize, (delta) => {
+  return runSimulations(options.games, options.mode, options.difficulty, options.batchSize, options.rules, (delta) => {
     completed += delta;
     progress(completed);
   });
@@ -103,6 +120,7 @@ function parseOptions(args: string[]): CliOptions {
   const defaultWorkers = Math.max(1, Math.min(games, availableParallelism()));
   const workers = readNumberArg(args, 'workers', defaultWorkers, 1);
   const batchSize = readNumberArg(args, 'batch-size', 10_000, 1);
+  const rules = parseRuleOverrides(args);
   return {
     games,
     mode,
@@ -111,6 +129,7 @@ function parseOptions(args: string[]): CliOptions {
     batchSize,
     progress: readBooleanArg(args, 'progress', false),
     pretty: readBooleanArg(args, 'pretty', true),
+    rules,
   };
 }
 
@@ -122,6 +141,26 @@ function readArg(args: string[], name: string): string | null {
   const index = args.findIndex((arg) => arg === `--${name}`);
   if (index < 0) return null;
   return args[index + 1] ?? null;
+}
+
+function readArgs(args: string[], name: string): string[] {
+  const values: string[] = [];
+  const prefix = `--${name}=`;
+
+  for (let index = 0; index < args.length; index += 1) {
+    const arg = args[index];
+    if (arg.startsWith(prefix)) {
+      values.push(arg.slice(prefix.length));
+      continue;
+    }
+
+    if (arg === `--${name}` && args[index + 1]) {
+      values.push(args[index + 1]);
+      index += 1;
+    }
+  }
+
+  return values;
 }
 
 function readNumberArg(args: string[], name: string, fallback: number, min: number): number {
@@ -149,6 +188,56 @@ function readBooleanArg(args: string[], name: string, fallback: boolean): boolea
   if (['1', 'true', 'yes', 'on'].includes(raw.toLowerCase())) return true;
   if (['0', 'false', 'no', 'off'].includes(raw.toLowerCase())) return false;
   throw new Error(`Invalid --${name}: expected true or false.`);
+}
+
+function parseRuleOverrides(args: string[]): RuleConfig {
+  const rules = structuredClone(DEFAULT_RULES);
+  const rulesPath = readArg(args, 'rules');
+
+  if (rulesPath) {
+    mergeRules(rules as unknown as Record<string, unknown>, JSON.parse(readFileSync(rulesPath, 'utf8')) as Record<string, unknown>);
+  }
+
+  for (const assignment of readArgs(args, 'set')) {
+    const separator = assignment.indexOf('=');
+    if (separator < 1) throw new Error(`Invalid --set "${assignment}": expected path=value.`);
+    const path = assignment.slice(0, separator);
+    const value = Number(assignment.slice(separator + 1));
+    if (!Number.isFinite(value)) throw new Error(`Invalid --set "${assignment}": value must be numeric.`);
+    setRuleValue(rules, path, value);
+  }
+
+  return rules;
+}
+
+function mergeRules(target: Record<string, unknown>, source: Record<string, unknown>): void {
+  for (const [key, value] of Object.entries(source)) {
+    const current = target[key];
+    if (isPlainObject(current) && isPlainObject(value)) {
+      mergeRules(current, value);
+    } else {
+      target[key] = value;
+    }
+  }
+}
+
+function setRuleValue(rules: RuleConfig, path: string, value: number): void {
+  const segments = path.split('.');
+  let cursor: Record<string, unknown> = rules as unknown as Record<string, unknown>;
+
+  for (const segment of segments.slice(0, -1)) {
+    const next = cursor[segment];
+    if (!isPlainObject(next)) throw new Error(`Invalid --set path "${path}".`);
+    cursor = next as Record<string, unknown>;
+  }
+
+  const leaf = segments[segments.length - 1];
+  if (!leaf || typeof cursor[leaf] !== 'number') throw new Error(`Invalid --set path "${path}".`);
+  cursor[leaf] = value;
+}
+
+function isPlainObject(value: unknown): value is Record<string, unknown> {
+  return typeof value === 'object' && value !== null && !Array.isArray(value);
 }
 
 async function runParallel(options: CliOptions): Promise<SimulationSummary> {
@@ -210,13 +299,14 @@ function runSimulations(
   mode: GameMode,
   difficulty: Difficulty,
   batchSize: number,
+  rules: RuleConfig,
   onProgress?: (completed: number) => void,
 ): SimulationSummary {
   const summary = createEmptySummary();
   let completedSinceProgress = 0;
 
   for (let index = 0; index < games; index += 1) {
-    recordGame(summary, runAutomatedGame(mode, difficulty));
+    recordGame(summary, runAutomatedGame(mode, difficulty, undefined, rules));
     completedSinceProgress += 1;
 
     if (completedSinceProgress >= batchSize || index === games - 1) {
@@ -237,6 +327,10 @@ function createEmptySummary(): SimulationSummary {
     dispersions: 0,
     lowCommunionEndings: 0,
     highDesolationEndings: 0,
+    finalChoiceSuccesses: 0,
+    christBannerChoices: 0,
+    shortcutChoices: 0,
+    outcomes: Object.fromEntries(OUTCOMES.map((outcome) => [outcome, 0])) as Record<OutcomeName, number>,
     metrics: Object.fromEntries(METRICS.map((metric) => [metric, createMetricAccumulator()])) as Record<MetricName, MetricAccumulator>,
   };
 }
@@ -252,9 +346,10 @@ function createMetricAccumulator(): MetricAccumulator {
 }
 
 function recordGame(summary: SimulationSummary, state: GameState): void {
-  const won = state.communion >= 5 && state.attachment < 7;
-  const fullVictory = state.communion >= 7 && state.attachment < 7;
-  const soberVictory = state.communion >= 5 && state.communion < 7 && state.attachment < 7;
+  const outcomeStats = readOutcomeStats(state);
+  const won = state.communion >= 5 && state.attachment < 7 && outcomeStats.finalChoiceSuccess;
+  const fullVictory = state.communion >= 7 && state.attachment < 7 && outcomeStats.finalChoiceSuccess;
+  const soberVictory = state.communion >= 5 && state.communion < 7 && state.attachment < 7 && outcomeStats.finalChoiceSuccess;
   const dispersion = state.attachment >= 7;
   const lowCommunionEnding = state.communion < 5 && state.attachment < 7;
   const highDesolationEnding = state.desolation >= 4;
@@ -266,6 +361,13 @@ function recordGame(summary: SimulationSummary, state: GameState): void {
   if (dispersion) summary.dispersions += 1;
   if (lowCommunionEnding) summary.lowCommunionEndings += 1;
   if (highDesolationEnding) summary.highDesolationEndings += 1;
+  if (outcomeStats.finalChoiceSuccess) summary.finalChoiceSuccesses += 1;
+  summary.christBannerChoices += outcomeStats.christBannerChoices;
+  summary.shortcutChoices += outcomeStats.shortcutChoices;
+
+  for (const outcome of OUTCOMES) {
+    summary.outcomes[outcome] += outcomeStats.outcomes[outcome];
+  }
 
   recordMetric(summary.metrics.communion, state.communion);
   recordMetric(summary.metrics.attachment, state.attachment);
@@ -273,6 +375,47 @@ function recordGame(summary: SimulationSummary, state: GameState): void {
   recordMetric(summary.metrics.consolation, state.consolation);
   recordMetric(summary.metrics.fruits, state.fruits);
   recordMetric(summary.metrics.rounds, state.round);
+}
+
+function readOutcomeStats(state: GameState): {
+  finalChoiceSuccess: boolean;
+  christBannerChoices: number;
+  shortcutChoices: number;
+  outcomes: Record<OutcomeName, number>;
+} {
+  const stats = {
+    finalChoiceSuccess: false,
+    christBannerChoices: 0,
+    shortcutChoices: 0,
+    outcomes: Object.fromEntries(OUTCOMES.map((outcome) => [outcome, 0])) as Record<OutcomeName, number>,
+  };
+
+  for (const event of state.playtestLog) {
+    if (event.type !== 'automated-outcome' || !isOutcomePayload(event.payload)) continue;
+    stats.outcomes[event.payload.outcome] += 1;
+    if (event.payload.acceptedShortcut) stats.shortcutChoices += 1;
+    else stats.christBannerChoices += 1;
+    if (event.payload.finalChoice && event.payload.success) stats.finalChoiceSuccess = true;
+  }
+
+  return stats;
+}
+
+function isOutcomePayload(value: unknown): value is {
+  outcome: OutcomeName;
+  finalChoice: boolean;
+  success: boolean;
+  acceptedShortcut: boolean;
+} {
+  if (typeof value !== 'object' || value === null) return false;
+  const payload = value as Record<string, unknown>;
+  return (
+    typeof payload.outcome === 'string' &&
+    OUTCOMES.includes(payload.outcome as OutcomeName) &&
+    typeof payload.finalChoice === 'boolean' &&
+    typeof payload.success === 'boolean' &&
+    typeof payload.acceptedShortcut === 'boolean'
+  );
 }
 
 function recordMetric(metric: MetricAccumulator, value: number): void {
@@ -292,6 +435,13 @@ function mergeSummary(target: SimulationSummary, source: SimulationSummary): voi
   target.dispersions += source.dispersions;
   target.lowCommunionEndings += source.lowCommunionEndings;
   target.highDesolationEndings += source.highDesolationEndings;
+  target.finalChoiceSuccesses += source.finalChoiceSuccesses;
+  target.christBannerChoices += source.christBannerChoices;
+  target.shortcutChoices += source.shortcutChoices;
+
+  for (const outcome of OUTCOMES) {
+    target.outcomes[outcome] += source.outcomes[outcome];
+  }
 
   for (const metricName of METRICS) {
     mergeMetric(target.metrics[metricName], source.metrics[metricName]);
@@ -324,6 +474,13 @@ function createReport(summary: SimulationSummary, options: CliOptions, elapsedMs
       dispersion: rate(summary.dispersions, summary.games),
       lowCommunionEnding: rate(summary.lowCommunionEndings, summary.games),
       highDesolationEnding: rate(summary.highDesolationEndings, summary.games),
+      finalChoiceSuccess: rate(summary.finalChoiceSuccesses, summary.games),
+      christBannerChoice: rate(summary.christBannerChoices, totalChoices(summary)),
+      shortcutChoice: rate(summary.shortcutChoices, totalChoices(summary)),
+    },
+    outcomes: {
+      counts: summary.outcomes,
+      rates: Object.fromEntries(OUTCOMES.map((outcome) => [outcome, rate(summary.outcomes[outcome], totalChoices(summary))])) as Record<OutcomeName, number>,
     },
     averages: Object.fromEntries(METRICS.map((name) => [name, average(summary.metrics[name], summary.games)])) as Record<MetricName, number>,
     stdev: Object.fromEntries(METRICS.map((name) => [name, stdev(summary.metrics[name], summary.games)])) as Record<MetricName, number>,
@@ -338,6 +495,7 @@ function createReport(summary: SimulationSummary, options: CliOptions, elapsedMs
       ]),
     ) as FinalReport['ranges'],
     distributions: Object.fromEntries(METRICS.map((name) => [name, sortHistogram(summary.metrics[name].histogram)])) as FinalReport['distributions'],
+    rules: options.rules,
   };
 }
 
@@ -378,6 +536,10 @@ function sortHistogram(histogram: Record<string, number>): Record<string, number
 
 function rate(count: number, games: number): number {
   return games > 0 ? round((count / games) * 100, 3) : 0;
+}
+
+function totalChoices(summary: SimulationSummary): number {
+  return summary.christBannerChoices + summary.shortcutChoices;
 }
 
 function round(value: number, decimals: number): number {

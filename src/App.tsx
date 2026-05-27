@@ -248,9 +248,9 @@ function drawOne(player: PlayerState, log?: (type: string, message: string, payl
 function drawTo(player: PlayerState, target: number, log?: (type: string, message: string, payload?: unknown) => void): PlayerState {
   let next = player;
   while (next.hand.length < target) {
-    const before = next.hand.length + next.deck.length + next.discard.length;
+    const before = next.hand.length;
     next = drawOne(next, log);
-    const after = next.hand.length + next.deck.length + next.discard.length;
+    const after = next.hand.length;
     if (before === after) break;
   }
   return next;
